@@ -24,9 +24,10 @@
   "devDependencies": {
     "electron": "~1.6.2",
     "electron-reload": "^1.1.0",
-    "jQuery": "~1.7.4"
+    "typescript": "^2.2.2"
   },
   "dependencies": {
-    "electron-google-oauth": "^2.0.0"
+    "electron-google-oauth": "^2.0.0",
+    "jQuery": "~1.7.4"
   }
 }
