@@ -1,0 +1,32 @@
+{
+  "name": "smart-mirror",
+  "version": "0.1.0",
+  "description": "Smart mirror concept aplication",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "",
+  "keywords": [
+    "smart",
+    "mirror",
+    "voice",
+    "recognition",
+    "google",
+    "leap",
+    "motion",
+    "gesture",
+    "controll",
+    "concept"
+  ],
+  "author": "Alberts Diterihs",
+  "license": "",
+  "devDependencies": {
+    "electron": "~1.6.2",
+    "electron-reload": "^1.1.0",
+    "jQuery": "~1.7.4"
+  },
+  "dependencies": {
+    "electron-google-oauth": "^2.0.0"
+  }
+}
