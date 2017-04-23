@@ -19,7 +19,7 @@
     "controll",
     "concept"
   ],
-  "author": "Alberts Diterihs",
+  "author": "CodeHell",
   "license": "",
   "devDependencies": {
     "electron": "~1.6.2",
@@ -29,6 +29,7 @@
   "dependencies": {
     "electron-google-oauth": "^2.0.0",
     "jQuery": "~1.7.4",
-    "tsd": "^0.6.5"
+    "tsd": "^0.6.5",
+    "typings": "^2.1.1"
   }
 }
