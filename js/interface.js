@@ -1,11 +1,18 @@
 $(document).ready( function() {
     // Retrieve RSS feed
-//    getRSS('http://www.delfi.lv/rss.php');
-    getRSS('http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml');
+    getRSS('http://www.delfi.lv/rss.php');
+//    getRSS('http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml');
     
     getWeather(456173);
     
-    
+    $('#overlay').click(function(){
+        console.debug('click');
+        hideOverlay();
+    });
+    $("#overlay *").click(function(e) {
+        e.stopPropagation();
+   });
+  
     if (!('webkitSpeechRecognition' in window)) {
         upgrade();
     } else {
@@ -41,8 +48,8 @@ function getRSS(rssUrl){
         success: function(feed) {
             console.debug("RSS: " + feed.title);
             $('#rss-content').empty();
-            $('#rss-content').append('<h2>' + feed.title + '</h2>')
-            for (var i = 0; i < feed.items.length && i < 5; i++){
+            $('#rss-content').append('<h2>' + feed.title + '</h2>');
+            for (var i = 0; i < feed.items.length && i < 8; i++){
                 appendRSSItem('#rss-content',feed.items[i],i);
             }
 //            console.debug(feed);
@@ -66,7 +73,7 @@ function appendRSSItem(elem,item,nr){
     html = $(html);
     html.css('animation-delay',nr*100+'ms');
     html.click(function(){
-        showArticle(item.link);        
+        showArticle(item.link);
     });
     $(elem).append(html);
 }
@@ -115,8 +122,12 @@ function hideOverlay(){
 
 function showArticle(url){
     $('#news-wrap').empty();
-    $('#news-wrap').show();
-    //Parse article
     
-    showOverlay();
+    getArticle(url,function(response){
+        console.debug(response);
+        $('#news-wrap').html(response);
+        showOverlay();
+        $('#news-wrap').show();
+    })
+    
 }
