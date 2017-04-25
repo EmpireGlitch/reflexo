@@ -12,7 +12,23 @@ $(document).ready( function() {
     $("#overlay *").click(function(e) {
         e.stopPropagation();
     });
-    $('.draggable').draggable();
+    
+    $('.draggable').draggable({
+        start: function(event, ui){
+            ui.helper.bind("click.prevent",
+                function(event){ 
+                    event.preventDefault(); 
+                });
+        },
+        stop: function(event, ui){
+            setTimeout(function(){
+                ui.helper.unbind("click.prevent");
+            }, 300);
+        },
+//        containment: "#mirrortop", 
+        scroll: false
+    });
+    
     if (!('webkitSpeechRecognition' in window)) {
         upgrade();
     } else {

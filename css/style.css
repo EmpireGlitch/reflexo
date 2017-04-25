@@ -84,6 +84,14 @@ h2{
     margin: 5px 0;
 }
 
+#mirrortop{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
 #overlay{
     display: none;
     background: rgba(0,0,0,0.5);
@@ -125,7 +133,9 @@ h2{
 }
 
 #news-wrap img{
+    display: block;
     max-width: 100%;
+    height: auto;
     margin: auto;
 }
 
