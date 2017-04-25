@@ -11,8 +11,8 @@ $(document).ready( function() {
     });
     $("#overlay *").click(function(e) {
         e.stopPropagation();
-   });
-  
+    });
+    $('.draggable').draggable();
     if (!('webkitSpeechRecognition' in window)) {
         upgrade();
     } else {
