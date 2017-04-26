@@ -1,4 +1,15 @@
 $(document).ready( function() {
+    // deprecated function fix for jfeed
+    jQuery.browser = {};
+    (function () {
+        jQuery.browser.msie = false;
+        jQuery.browser.version = 0;
+        if (navigator.userAgent.match(/MSIE ([0-9]+)\./)) {
+            jQuery.browser.msie = true;
+            jQuery.browser.version = RegExp.$1;
+        }
+    })();
+    
     // Retrieve RSS feed
     getRSS('http://www.delfi.lv/rss.php');
 //    getRSS('http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml');
