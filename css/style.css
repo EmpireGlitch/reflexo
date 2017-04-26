@@ -43,6 +43,10 @@ h2{
     animation-fill-mode: backwards;
 }
 
+#voice-wrap{
+    z-index: 50000;
+}
+
 #rss-wrap{
     position: absolute;
     right: 0;
@@ -137,6 +141,38 @@ h2{
     max-width: 100%;
     height: auto;
     margin: auto;
+}
+
+.web-page{
+    background: white;
+    position: absolute;
+    top: 30px;
+    left: 50px;
+    right: 50px;
+    bottom: 30px;
+    margin: auto;
+    width: 800px;
+    height: 900px;
+    
+}
+
+.debug{
+    width: 120px;
+    min-height: 150px;
+    padding: 15px 3px;
+}
+
+.button{
+    background: #0045a3;
+    font-size: 18px;
+    height: 40px;
+    width: 100%;
+    margin: 0;
+    margin-bottom: 3px;
+    margin-left: -1px;
+    text-align: center;
+    border: solid 1px white;
+    line-height: 40px;
 }
 
 @-webkit-keyframes sk-rotateplane {

@@ -24,6 +24,13 @@ $(document).ready( function() {
         e.stopPropagation();
     });
     
+    $('#show-sphinx-test').click(function(){
+        showOverlay();
+        $('#overlay *').hide();
+        $('#overlay').append('<iframe class="web-page" src="sphinx-test/live.html"></iframe>');
+        
+    });
+    
     $('.draggable').draggable({
         start: function(event, ui){
             ui.helper.bind("click.prevent",
