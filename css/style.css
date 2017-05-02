@@ -114,7 +114,7 @@ h2{
   -webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
 }
 
-#news-wrap{
+#overlay > *{
     position: absolute;
     top: 50px;
     bottom: 50px;
@@ -145,6 +145,7 @@ h2{
 
 .web-page{
     background: white;
+    /*
     position: absolute;
     top: 30px;
     left: 50px;
@@ -153,13 +154,18 @@ h2{
     margin: auto;
     width: 800px;
     height: 900px;
-    
+    */
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
 
 .debug{
+    position: absolute;
     width: 120px;
     min-height: 150px;
     padding: 15px 3px;
+    top: 150px;
 }
 
 .button{

@@ -27,7 +27,8 @@ $(document).ready( function() {
     $('#show-sphinx-test').click(function(){
         showOverlay();
         $('#overlay *').hide();
-        $('#overlay').append('<iframe class="web-page" src="sphinx-test/live.html"></iframe>');
+        $('#sphinx-wrap').append('<iframe class="web-page" src="sphinx-test/live.html"></iframe>');
+        $('#sphinx-wrap').show();
         
     });
     
@@ -155,6 +156,7 @@ function hideOverlay(){
 }
 
 function showArticle(url){
+    $('#overlay').hide();
     $('#news-wrap').empty();
     
     getArticle(url,function(response){
