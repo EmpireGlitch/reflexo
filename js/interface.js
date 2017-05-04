@@ -59,8 +59,10 @@ $(document).ready( function() {
         scroll: false
     });
     
-    getReddit('videos')
+    initializeVoice();
     
+    getReddit('videos')
+    /*
     if (!('webkitSpeechRecognition' in window)) {
         upgrade();
     } else {
@@ -83,12 +85,25 @@ $(document).ready( function() {
     recognition.lang = 'en-US';
 //    recognition.start();
     }
-    
+    */
     setTimeout(function(){
 //        showOverlay();
     },2000);
     
 });
+
+var appRoot = require('app-root-path');
+
+
+
+function initializeVoice(system){
+    if (system === undefined){
+        system = 'sphinx';
+    }
+    if (system === 'sphinx'){
+        startSphinx();
+    }
+}
 
 function getRSS(rssUrl){
     $.getFeed({
@@ -131,7 +146,7 @@ function getReddit(sub){
     $.get('https://www.reddit.com/r/'+ sub +'.json',function(res){
 //        console.debug(sub);
         $('.reddit-content').empty();
-        var res = res.data.children
+        var res = res.data.children;
         for (var i = 0; i < res.length; i++){
 //            console.debug(res[i]);
             appendRedditItem('.reddit-content',res[i],i);

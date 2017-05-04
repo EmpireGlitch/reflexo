@@ -7,6 +7,8 @@ const BrowserWindow = electron.BrowserWindow
 const path = require('path')
 const url = require('url')
 
+
+
 // reload on source change setup
 require('electron-reload')(__dirname);
 
