@@ -6,11 +6,15 @@
   // first we make sure annyang started succesfully
   if (annyang) {
 
+    var test = function (){
+      alert("YE");
+    }
+
     // define the functions our commands will run.
     var hello = function() {
-      $("#hello").slideDown("slow");
-      scrollTo("#section_hello");
-      Console.log("Hello")
+      // $("#hello").slideDown("slow");
+      // scrollTo("#section_hello");
+      Console.log("Hello");
     };
 
     var showFlickr = function(tag) {
@@ -59,6 +63,7 @@
       'hello (there)':        hello,
       'show me *search':      showFlickr,
       'show :type report':    showTPS,
+      'Test':    test,
       'let\'s get started':   getStarted,
     };
 
@@ -74,7 +79,7 @@
     annyang.setLanguage('en');
 
     // Start listening. You can call this here, or attach this call to an event, button, etc.
-    annyang.start();
+   annyang.start({autoRestart:false, continuous: true});
     console.log("Annyang is Listening");
     
   } else {

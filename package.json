@@ -27,6 +27,8 @@
     "typescript": "^2.2.2"
   },
   "dependencies": {
+    "@google-cloud/speech": "^0.9.1",
+    "annyang": "^2.6.0",
     "electron-google-oauth": "^2.0.0",
     "jquery": "^3.2.1",
     "tsd": "^0.6.5",
