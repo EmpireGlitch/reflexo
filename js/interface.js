@@ -24,12 +24,16 @@ $(document).ready( function() {
         e.stopPropagation();
     });
     
+    // Debug buttons
     $('#show-sphinx-test').click(function(){
         showOverlay();
         $('#overlay *').hide();
         $('#sphinx-wrap').append('<iframe class="web-page" src="sphinx-test/live.html"></iframe>');
         $('#sphinx-wrap').show();
         
+    });
+    $('#reload-button').click(function(){
+        location.reload();        
     });
     
     $('.draggable').draggable({
@@ -47,6 +51,8 @@ $(document).ready( function() {
 //        containment: "#mirrortop", 
         scroll: false
     });
+    
+    getReddit('videos')
     
     if (!('webkitSpeechRecognition' in window)) {
         upgrade();
@@ -104,6 +110,45 @@ function appendRSSItem(elem,item,nr){
     + item.title
 //    + '</a>'
     + '</h3>'
+    + '</div>';
+    html = $(html);
+    html.css('animation-delay',nr*100+'ms');
+    html.click(function(){
+        showArticle(item.link);
+    });
+    $(elem).append(html);
+}
+
+function getReddit(sub){
+    
+    $.get('https://www.reddit.com/r/'+ sub +'.json',function(res){
+        console.debug(sub);
+        console.debug(res.data.children);
+        $('.reddit-content').empty();
+        var res = res.data.children
+        for (var i = 0; i < res.length; i++){
+            console.debug(res[i]);
+            appendRedditItem('.reddit-content',res[i],i);
+        }
+    });
+}
+
+function appendRedditItem(elem,item,nr){
+    if (nr === undefined){
+        nr = 0;
+    }
+    var html = '';
+    
+    html += '<div class="reddit-entry">'
+    + '<img class="thumbnail" src="'
+    + item.data.thumbnail
+    + '"/>'
+    + '<h3>'
+    + item.data.title
+    + '</h3>'
+    + '<p>'
+    + 'comments'
+    + '</p>'
     + '</div>';
     html = $(html);
     html.css('animation-delay',nr*100+'ms');

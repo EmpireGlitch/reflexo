@@ -80,11 +80,39 @@ h2{
     animation-fill-mode: backwards;
 }
 
+.rss-entry .thumbnail{
+    float: left;
+    width: 140px;
+}
+
 .rss-entry:last-child{
     border-bottom: none;
 }
 
 .rss-entry h3{
+    margin: 5px 0;
+}
+
+
+.reddit-wrap{
+    position: absolute;
+    right: 270px;
+    width: 450px;
+}
+
+.reddit-entry{
+    padding: 5px;
+    border-bottom: solid 1px #c0c0c0;
+    animation-name: slide-down;
+    animation-duration: 500ms;
+    animation-fill-mode: backwards;
+}
+
+.reddit-entry:last-child{
+    border-bottom: none;
+}
+
+.reddit-entry h3{
     margin: 5px 0;
 }
 
