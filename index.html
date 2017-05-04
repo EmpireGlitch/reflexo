@@ -2,29 +2,37 @@
 
 <html>
     <head>
-        <title>Smart Mirror Refexo</title>
+        <title>Reflexo Smart Mirror </title>
         <meta charset="UTF-8">
         <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
         <link rel="stylesheet" href="css/style.css">
     </head>
-<!--    <html lang="en-US">
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>-->
     <body>
         <div id="mirrortop">
             <div id="voice-wrap" class="frame">
                 <div id="voice-command"></div>
                 <div id="voice-status"><div class="spinner"></div></div>
             </div>
-            <div id="rss-wrap" class="frame">
+            <div class="frame debug draggable">
+                <h2>Debug</h2>
+                <div class="button" id="reload-button">Reload</div>
+                <div class="button" id="show-sphinx-test">Sphinx</div>
+            </div>
+            <div id="rss-wrap" class="frame draggable">
                 <!--<h2> RSS </h2>-->
-                <!--<div id="rss-content" rssnum="5" rss_url="http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml" ></div>-->
                 <div id="rss-content">
                     <div class="spinner"></div>
                 </div>
             </div>
+            
+            <div class="reddit-wrap frame draggable">
+                <div class="reddit-content">
+                    <div class="spinner"></div>
+                </div>
+            </div>
 
-            <div id="weather-wrap" class="frame">
-                <!--<h2> Weather </h2>-->
+            <div id="weather-wrap" class="frame draggable">
+<!--                <!--<h2> Weather </h2>-->
                 <div id="weather-content">
                     <div id="weather-current">
                         <div class="spinner"></div>
@@ -37,19 +45,21 @@
 
             </div>
 
-            <div id="gallery-wrap" class="frame">
+<!--            <div id="gallery-wrap" class="frame draggable">
                 <div class="image-wrap">
                     <div class="spinner"></div>
                 </div>
-            </div>
+            </div>-->
         </div>
         <div id="overlay">
-            <!--<iframe src="http://www.delfi.lv" class="news-wrap"></iframe>-->
-            <div class="news-wrap"></div>
+            <div class="popup draggable" id="news-wrap"></div>
+            <div class="popup draggable iframe-wrap" id="sphinx-wrap"></div>
         </div>
         <script>window.$ = window.jQuery = require('jquery');</script>
-        <script src="js/jquery-3.1.1.min.js"></script>
+        <!--<script src="js/jquery-3.1.1.min.js"></script>-->
+        <script src="js/jquery-ui.min.js"></script>
         <script src="js/jquery.jfeed.js"></script>
         <script src="js/interface.js"></script>
+        <script src="js/newsParser.js"></script>
     </body>
 </html>

@@ -43,6 +43,10 @@ h2{
     animation-fill-mode: backwards;
 }
 
+#voice-wrap{
+    z-index: 50000;
+}
+
 #rss-wrap{
     position: absolute;
     right: 0;
@@ -76,12 +80,48 @@ h2{
     animation-fill-mode: backwards;
 }
 
+.rss-entry .thumbnail{
+    float: left;
+    width: 140px;
+}
+
 .rss-entry:last-child{
     border-bottom: none;
 }
 
 .rss-entry h3{
     margin: 5px 0;
+}
+
+
+.reddit-wrap{
+    position: absolute;
+    right: 270px;
+    width: 450px;
+}
+
+.reddit-entry{
+    padding: 5px;
+    border-bottom: solid 1px #c0c0c0;
+    animation-name: slide-down;
+    animation-duration: 500ms;
+    animation-fill-mode: backwards;
+}
+
+.reddit-entry:last-child{
+    border-bottom: none;
+}
+
+.reddit-entry h3{
+    margin: 5px 0;
+}
+
+#mirrortop{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 #overlay{
@@ -102,18 +142,71 @@ h2{
   -webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
 }
 
-.news-wrap{
+#overlay > *{
     position: absolute;
     top: 50px;
     bottom: 50px;
     left: 30px;
     right: 30px;
+    padding: 10px;
+    margin: auto;
+    max-width: 800px;
     /*width: 100%;*/
     /*height: 100%;*/
     animation-name: headIn;
     animation-duration: 500ms;
     animation-fill-mode: backwards;
-    background: #1249d2;
+    /*background: #1249d2;*/
+    overflow: auto;
+}
+
+#news-wrap p{
+    
+}
+
+#news-wrap img{
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: auto;
+}
+
+.web-page{
+    background: white;
+    /*
+    position: absolute;
+    top: 30px;
+    left: 50px;
+    right: 50px;
+    bottom: 30px;
+    margin: auto;
+    width: 800px;
+    height: 900px;
+    */
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.debug{
+    position: absolute;
+    width: 120px;
+    min-height: 150px;
+    padding: 15px 3px;
+    top: 150px;
+}
+
+.button{
+    background: #0045a3;
+    font-size: 18px;
+    height: 40px;
+    width: 100%;
+    margin: 0;
+    margin-bottom: 3px;
+    margin-left: -1px;
+    text-align: center;
+    border: solid 1px white;
+    line-height: 40px;
 }
 
 @-webkit-keyframes sk-rotateplane {
