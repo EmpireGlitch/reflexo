@@ -59,8 +59,10 @@ $(document).ready( function() {
         scroll: false
     });
     
-    getReddit('videos')
+    initializeVoice();
     
+    getReddit('videos')
+    /*
     if (!('webkitSpeechRecognition' in window)) {
         upgrade();
     } else {
@@ -83,18 +85,31 @@ $(document).ready( function() {
     recognition.lang = 'en-US';
 //    recognition.start();
     }
-    
+    */
     setTimeout(function(){
 //        showOverlay();
     },2000);
     
 });
 
+var appRoot = require('app-root-path');
+
+
+
+function initializeVoice(system){
+    if (system === undefined){
+        system = 'sphinx';
+    }
+    if (system === 'sphinx'){
+        startSphinx();
+    }
+}
+
 function getRSS(rssUrl){
     $.getFeed({
         url: rssUrl,
         success: function(feed) {
-            console.debug("RSS: " + feed.title);
+//            console.debug("RSS: " + feed.title);
             $('#rss-content').empty();
             $('#rss-content').append('<h2>' + feed.title + '</h2>');
             for (var i = 0; i < feed.items.length && i < 8; i++){
@@ -129,12 +144,11 @@ function appendRSSItem(elem,item,nr){
 function getReddit(sub){
     
     $.get('https://www.reddit.com/r/'+ sub +'.json',function(res){
-        console.debug(sub);
-        console.debug(res.data.children);
+//        console.debug(sub);
         $('.reddit-content').empty();
-        var res = res.data.children
+        var res = res.data.children;
         for (var i = 0; i < res.length; i++){
-            console.debug(res[i]);
+//            console.debug(res[i]);
             appendRedditItem('.reddit-content',res[i],i);
         }
     });
@@ -179,17 +193,17 @@ function getWeather(cityID){
     
     $.getJSON('http://api.openweathermap.org/data/2.5/weather?id=' + cityID + '&appid=e7bd0ec8e9425f345f1215e18dcf4871&units=metric',function(res){
         $('#weather-current').empty();
-        console.debug(res);
+//        console.debug(res);
         var html = ''
         html += res.name + ' '
         + res.main.temp + ' '
         + res.weather[0].description;
         $('#weather-current').append(html);
-        console.debug(html);
+//        console.debug(html);
     });
     $.getJSON('http://api.openweathermap.org/data/2.5/forecast?id=' + cityID + '&appid=e7bd0ec8e9425f345f1215e18dcf4871&units=metric',function(res){
         $('#weather-forcast').empty();
-        console.debug(res);
+//        console.debug(res);
         
     });
 }
