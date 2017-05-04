@@ -32,6 +32,13 @@ $(document).ready( function() {
         $('#sphinx-wrap').show();
         
     });
+    $('#show-anyang-test').click(function(){
+        showOverlay();
+        $('#overlay *').hide();
+        $('#sphinx-wrap').append('<iframe class="web-page" src="anyangTest/TestAnnayang.html"></iframe>');
+        $('#sphinx-wrap').show();
+        
+    });
     $('#reload-button').click(function(){
         location.reload();        
     });
