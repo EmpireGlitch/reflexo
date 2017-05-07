@@ -45,10 +45,10 @@ function updateStatus(newStatus) {
 function displayRecording(display) {
 
   if (display){
-      $('#recording-indicator').html('Listening');
+      setVoiceStatus('listening');
   }
   else {
-      $('#recording-indicator').html('Sleeping');      
+      setVoiceStatus('ready');  
   }
 };
 
@@ -69,7 +69,7 @@ function startUserMedia(stream) {
 
 // This starts recording. We first need to get the id of the grammar to use
 var startRecording = function(grammarTitle) {
-    console.debug('Start Recording');
+    console.debug('Starting Recording');
   for (var i = 0; i < grammarIds.length; i++){
       if (grammarIds[i].title === grammarTitle){
           id = grammarIds[i].id;
@@ -93,21 +93,18 @@ var recognizerReady = function() {
      isRecognizerReady = true;
      updateUI();
      updateStatus("Recognizer ready");
-     $('#voice-status').empty();
+     setVoiceStatus('ready');
+     $.event.trigger({
+	type: "sphinxReady",
+	message: "Spinx voice recognition is ready",
+	time: new Date()
+    });
+//     startRecording(currentGrammar);
 };
 
-// We get the grammars defined below and fill in the input select tag
+// generate grammar list
 var updateGrammars = function() {
-    /*
-  var selectTag = document.getElementById('grammars');
-  for (var i = 0 ; i < grammarIds.length ; i++) {
-      var newElt = document.createElement('option');
-      newElt.value=grammarIds[i].id;
-      newElt.innerHTML = grammarIds[i].title;
-      selectTag.appendChild(newElt);
-  }   
-  */
- console.debug('update Grammars::',grammarIds);
+    console.debug('update Grammars::',grammarIds);
 };
 
 // This adds a grammar from the grammars array
@@ -123,14 +120,14 @@ var feedGrammar = function(g, index, id) {
     postRecognizerJob({command: 'addGrammar', data: g[index].g},
                         function(id) {feedGrammar(grammars, index + 1, {id:id});});
   } else {
-    // We are adding keyword spotting which has id 0
-    grammarIds.push({"id":0, "title": "Keyword spotting"});
+    grammarIds.push({"id":0, "title": "Base Commands Keywords"});
     recognizerReady();
   }
 };
 
 // This adds words to the recognizer. When it calls back, we add grammars
 var feedWords = function(words) {
+    updateStatus('Adding words');
      postRecognizerJob({command: 'addWords', data: words},
                   function() {feedGrammar(grammars, 0);});
 };
@@ -138,7 +135,7 @@ var feedWords = function(words) {
 // This initializes the recognizer. When it calls back, we add words
 var initRecognizer = function() {
     // You can pass parameters to the recognizer, such as : {command: 'initialize', data: [["-hmm", "my_model"], ["-fwdflat", "no"]]}
-    postRecognizerJob({command: 'initialize', data: [["-kws", "kws.txt"], ["-dict","kws.dict"]]},
+    postRecognizerJob({command: 'initialize', data: [["-kws", "commands.txt"], ["-dict","dictionary.dict"]]},
                       function() {
                                   if (recorder) recorder.consumers = [recognizer];
                                   feedWords(wordList);});
@@ -170,15 +167,21 @@ function startSphinx(){
           // This is the case when we have an error
           if (e.data.hasOwnProperty('status') && (e.data.status == "error")) {
             updateStatus("Error in " + e.data.command + " with code " + e.data.code);
+            console.debug(e.data.code);
+            console.debug(e.data);
           }
       };
       // Once the worker is fully loaded, we can call the initialize function
       // but before that we lazy-load two files for keyword spoting (key phrase
       // file plus associated dictionary.
       
+//      postRecognizerJob({command: 'lazyLoad',
+//                         data: {folders: [], files: [["/", "kws.txt", appRoot + "/kws.txt"],
+//                                                     ["/", "kws.dict", appRoot + "/kws.dict"]]}
+//                        }, initRecognizer);
       postRecognizerJob({command: 'lazyLoad',
-                         data: {folders: [], files: [["/", "kws.txt", appRoot + "/kws.txt"],
-                                                     ["/", "kws.dict", appRoot + "/kws.dict"]]}
+                         data: {folders: [], files: [["/", "commands.txt", appRoot + "/sphinxCommands/commands.txt"],
+                                                     ["/", "dictionary.dict", appRoot + "/sphinxCommands/dictionary.dict"]]}
                         }, initRecognizer);
                         
   });
@@ -196,20 +199,7 @@ function startSphinx(){
                                   updateStatus("No live audio input in this browser");
                               });
   else updateStatus("No web audio support in this browser");
-
-    // Wiring JavaScript to the UI
-    $('#start-sphinx-button').click(function(){
-        startRecording('Base Commands');
-    });
-    $('#stop-sphinx-button').click(function(){
-        stopRecording();
-    });
-//    var startBtn = document.getElementById('start-sphinx-button');
-//    var stopBtn = document.getElementById('stop-sphinx-button');
-//    startBtn.disabled = true;
-//    stopBtn.disabled = true;
-//    startBtn.onclick = startRecording;
-//    stopBtn.onclick = stopRecording;
+    
 };
 
  // This is the list of words that need to be added to the recognizer
@@ -263,6 +253,8 @@ var wordList = [
     ["SHUT", "SH AH T"],
     ["UP", "AH P"]
 ];
+
+var wordList = [];
 
 var grammarCommands = 
         {numStates: 1, start: 0, end: 0, transitions:[
@@ -324,9 +316,9 @@ var grammarOses =
 
 var grammars = 
         [
-            {title: "OSes", g: grammarOses}, 
-            {title: "Digits", g: grammarDigits}, 
-            {title: "Cities", g: grammarCities},
-            {title: "Base Commands", g: grammarCommands}
+//            {title: "OSes", g: grammarOses}, 
+//            {title: "Digits", g: grammarDigits}, 
+//            {title: "Cities", g: grammarCities},
+//            {title: "Base Commands", g: grammarCommands}
         ];
 var grammarIds = [];

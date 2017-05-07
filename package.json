@@ -30,6 +30,7 @@
     "app-root-path": "^2.0.1",
     "electron-google-oauth": "^2.0.0",
     "jquery": "^3.2.1",
+    "leapjs": "^0.6.4",
     "tsd": "^0.6.5",
     "typings": "^2.1.1"
   }

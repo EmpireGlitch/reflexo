@@ -42,6 +42,12 @@ $(document).ready( function() {
     $('#reload-button').click(function(){
         location.reload();        
     });
+    $('#start-sphinx-button').click(function(){
+        startRecording('Base Commands');
+    });
+    $('#stop-sphinx-button').click(function(){
+        stopRecording();
+    });
     
     $('.draggable').draggable({
         start: function(event, ui){
@@ -101,6 +107,16 @@ function initializeVoice(system){
         system = 'sphinx';
     }
     if (system === 'sphinx'){
+        var startTime = new Date();
+        console.debug('Starting Sphinx');
+        // Start listening as sphinx is ready
+        $(document).on("sphinxReady", function(){
+            console.debug('Event Sphinx ready');
+//            startRecording('Base Commands Keywords');
+            var endTime = new Date();
+            console.debug('Sphinx Startup time: ',endTime-startTime+'ms');
+        });
+        // initialize sphinx
         startSphinx();
     }
 }
@@ -232,4 +248,28 @@ function showArticle(url){
         $('#news-wrap').show();
     })
     
+}
+
+function setVoiceStatus(status){
+    switch (status){
+        case 'initializing':
+            $('#voice-status').html('<div class="spinner"></div>');
+            break;
+        case 'ready':
+            $('#voice-status').html('Ready');
+            break;
+        case 'listening':
+            $('#voice-status').html('Listening');
+            break;
+        case 'error':
+            $('#voice-status').html('Error');
+            break;
+        case 'Procesing':
+            $('#voice-status').html('Procesing');
+            break;
+        default:
+            $('#voice-status').html('Error');
+            console.error('setVoiceStatus',status,'not recognized');
+            break;
+    }
 }
