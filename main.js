@@ -6,6 +6,8 @@ const BrowserWindow = electron.BrowserWindow
 
 const path = require('path')
 const url = require('url')
+//const leapjs      = require('leapjs');
+//const controller  = new leapjs.Controller();
 // AIzaSyDo2e6MiiQm5ACYSslFudsa0aXh3DAaExc
 process.env.GOOGLE_API_KEY = '95ed115bfc8752dabacfcab95389e69bc8351d6b';
 process.env.GOOGLE_DEFAULT_CLIENT_ID = '257173013577-8d65ov9gm6qkuuldv01kht7vojdbljdj.apps.googleusercontent.com';

@@ -1,3 +1,8 @@
+var appRoot = require('app-root-path');
+var leapjs      = require('leapjs');
+var controller  = new leapjs.Controller({enableGestures: true});
+
+// When page ready load interface
 $(document).ready( function() {
     // deprecated function fix for jfeed
     jQuery.browser = {};
@@ -14,8 +19,10 @@ $(document).ready( function() {
     getRSS('http://www.delfi.lv/rss.php');
 //    getRSS('http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml');
     
+    // Get weather
     getWeather(456173);
     
+    // Make popups dissapear when click on size/"blank" space
     $('#overlay').click(function(){
         console.debug('click');
         hideOverlay();
@@ -25,6 +32,7 @@ $(document).ready( function() {
     });
     
     // Debug buttons
+    // Sphinx test page
     $('#show-sphinx-test').click(function(){
         showOverlay();
         $('#overlay *').hide();
@@ -32,6 +40,8 @@ $(document).ready( function() {
         $('#sphinx-wrap').show();
         
     });
+    
+    // Anayng test page
     $('#show-anyang-test').click(function(){
         showOverlay();
         $('#overlay *').hide();
@@ -39,16 +49,23 @@ $(document).ready( function() {
         $('#sphinx-wrap').show();
         
     });
+    
+    // Reload mirror page
     $('#reload-button').click(function(){
         location.reload();        
     });
+    
+    // Sphinx debug frame
+    // Start Sphinx listening
     $('#start-sphinx-button').click(function(){
         startRecording('Base Commands');
     });
+    // Stop Sphinx listening
     $('#stop-sphinx-button').click(function(){
         stopRecording();
     });
     
+    // Make frames draggable
     $('.draggable').draggable({
         start: function(event, ui){
             ui.helper.bind("click.prevent",
@@ -65,42 +82,59 @@ $(document).ready( function() {
         scroll: false
     });
     
-    initializeVoice();
+    // Load voice recignition
+//    initializeVoice();
     
-    getReddit('videos')
-    /*
-    if (!('webkitSpeechRecognition' in window)) {
-        upgrade();
-    } else {
-    var recognition = new webkitSpeechRecognition();
-    recognition.continuous = true;
-    recognition.interimResults = true;
-
-    recognition.onstart = function(){ 
-        console.debug('voice-start'); 
-    };
-    recognition.onresult = function(event){ 
-        console.debug(event,'voice-result'); 
-    };
-    recognition.onerror = function(event){ 
-        console.debug(event,'voice-error');
-    };
-    recognition.onend = function(){
-        console.debug('voice-end');
-    };
-    recognition.lang = 'en-US';
-//    recognition.start();
-    }
-    */
-    setTimeout(function(){
-//        showOverlay();
-    },2000);
+    // Load Reddit feed
+    getReddit('videos');
     
 });
+    
+controller.on('deviceFrame', function(frame) {
+    // loop through available gestures
+    for(var i = 0; i < frame.gestures.length; i++){
+      var gesture = frame.gestures[i];
+      var type    = gesture.type;          
 
-var appRoot = require('app-root-path');
+      switch( type ){
 
+        case "circle":
+          if (gesture.state == "stop") {
+            console.log('circle');
+          }
+          break;
 
+        case "swipe":
+          if (gesture.state == "stop") {
+            console.log('swipe');
+          }
+          break;
+
+        case "screenTap":
+          if (gesture.state == "stop") {
+            console.log('screenTap');
+          }
+          break;
+
+        case "keyTap":
+          if (gesture.state == "stop") {
+            console.log('keyTap');
+          }
+          break;
+
+        }
+      }
+});
+
+leapjs.loop({
+
+  hand: function(hand){
+    console.log( hand.screenPosition() );
+  }
+
+}).use('screenPosition');
+
+controller.connect();
 
 function initializeVoice(system){
     if (system === undefined){
