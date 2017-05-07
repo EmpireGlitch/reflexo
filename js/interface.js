@@ -50,6 +50,15 @@ $(document).ready( function() {
         
     });
     
+    // Recorder test page
+    $('#show-recorder-test').click(function(){
+        showOverlay();
+        $('#overlay *').hide();
+        $('#sphinx-wrap').append('<iframe class="web-page" src="recorder/index.html"></iframe>');
+        $('#sphinx-wrap').show();
+        
+    });
+    
     // Reload mirror page
     $('#reload-button').click(function(){
         location.reload();        

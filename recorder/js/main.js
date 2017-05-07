@@ -30,6 +30,7 @@ playButton.onclick = play;
 downloadButton.onclick = download;
 
 // window.isSecureContext could be used for Chrome
+/*
 var isSecureOrigin = location.protocol === 'https:' ||
 location.hostname === 'localhost';
 if (!isSecureOrigin) {
@@ -37,6 +38,9 @@ if (!isSecureOrigin) {
     '\n\nChanging protocol to HTTPS');
   location.protocol = 'HTTPS';
 }
+*/
+
+var isSecureOrigin = true;
 
 var constraints = {
   audio: true,
