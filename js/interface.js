@@ -1,9 +1,9 @@
 var appRoot = require('app-root-path');
-var leapjs      = require('leapjs');
-var controller  = new leapjs.Controller({enableGestures: true});
+var leapjs = require('leapjs');
+var controller = new leapjs.Controller({enableGestures: true});
 
 // When page ready load interface
-$(document).ready( function() {
+$(document).ready(function () {
     // deprecated function fix for jfeed
     jQuery.browser = {};
     (function () {
@@ -14,287 +14,251 @@ $(document).ready( function() {
             jQuery.browser.version = RegExp.$1;
         }
     })();
-    
-    // Retrieve RSS feed
-    getRSS('http://www.delfi.lv/rss.php');
-//    getRSS('http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml');
-    
-    // Get weather
-    getWeather(456173);
-    
-    // Make popups dissapear when click on size/"blank" space
-    $('#overlay').click(function(){
-        console.debug('click');
-        hideOverlay();
-    });
-    $("#overlay *").click(function(e) {
-        e.stopPropagation();
-    });
-    
+
     // Debug buttons
     // Sphinx test page
-    $('#show-sphinx-test').click(function(){
+    $('#show-sphinx-test').click(function () {
         showOverlay();
         $('#overlay *').hide();
         $('#sphinx-wrap').append('<iframe class="web-page" src="sphinx-test/live.html"></iframe>');
         $('#sphinx-wrap').show();
-        
+
     });
-    
+
     // Anayng test page
-    $('#show-anyang-test').click(function(){
+    $('#show-anyang-test').click(function () {
         showOverlay();
         $('#overlay *').hide();
         $('#sphinx-wrap').append('<iframe class="web-page" src="anyangTest/TestAnnayang.html"></iframe>');
         $('#sphinx-wrap').show();
-        
+
     });
-    
+
     // Recorder test page
-    $('#show-recorder-test').click(function(){
+    $('#show-recorder-test').click(function () {
         showOverlay();
         $('#overlay *').hide();
         $('#sphinx-wrap').append('<iframe class="web-page" src="recorder/index.html"></iframe>');
         $('#sphinx-wrap').show();
-        
+
     });
-    
+
     // Reload mirror page
-    $('#reload-button').click(function(){
-        location.reload();        
+    $('#reload-button').click(function () {
+        location.reload();
     });
-    
+
     // Sphinx debug frame
     // Start Sphinx listening
-    $('#start-sphinx-button').click(function(){
+    $('#start-sphinx-button').click(function () {
         startRecording('Base Commands');
     });
     // Stop Sphinx listening
-    $('#stop-sphinx-button').click(function(){
+    $('#stop-sphinx-button').click(function () {
         stopRecording();
     });
-    
+
+    // Retrieve RSS feed
+    getRSS('http://www.delfi.lv/rss.php');
+//    getRSS('http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml');
+
+    // Get weather
+    getWeather(456173);
+
+    // Load Reddit feed
+    getReddit('videos');
+
+
+
+    // Make popups dissapear when click on size/"blank" space
+    $('#overlay').click(function () {
+        console.debug('click');
+        hideOverlay();
+    });
+    $("#overlay *").click(function (e) {
+        e.stopPropagation();
+    });
+
     // Make frames draggable
     $('.draggable').draggable({
-        start: function(event, ui){
+        start: function (event, ui) {
             ui.helper.bind("click.prevent",
-                function(event){ 
-                    event.preventDefault(); 
-                });
+                    function (event) {
+                        event.preventDefault();
+                    });
         },
-        stop: function(event, ui){
-            setTimeout(function(){
+        stop: function (event, ui) {
+            setTimeout(function () {
                 ui.helper.unbind("click.prevent");
             }, 300);
         },
 //        containment: "#mirrortop", 
         scroll: false
     });
-    
+
+
+
     // Load voice recignition
 //    initializeVoice();
-    
-    // Load Reddit feed
-    getReddit('videos');
-    
+
+
+
+    initLeap();
+
 });
-    
-controller.on('deviceFrame', function(frame) {
-    // loop through available gestures
-    for(var i = 0; i < frame.gestures.length; i++){
-      var gesture = frame.gestures[i];
-      var type    = gesture.type;          
-
-      switch( type ){
-
-        case "circle":
-          if (gesture.state == "stop") {
-            console.log('circle');
-          }
-          break;
-
-        case "swipe":
-          if (gesture.state == "stop") {
-            console.log('swipe');
-          }
-          break;
-
-        case "screenTap":
-          if (gesture.state == "stop") {
-            console.log('screenTap');
-          }
-          break;
-
-        case "keyTap":
-          if (gesture.state == "stop") {
-            console.log('keyTap');
-          }
-          break;
-
-        }
-      }
-});
-
-leapjs.loop({
-
-  hand: function(hand){
-    console.log( hand.screenPosition() );
-  }
-
-}).use('screenPosition');
 
 controller.connect();
 
-function initializeVoice(system){
-    if (system === undefined){
+function initializeVoice(system) {
+    if (system === undefined) {
         system = 'sphinx';
     }
-    if (system === 'sphinx'){
+    if (system === 'sphinx') {
         var startTime = new Date();
         console.debug('Starting Sphinx');
         // Start listening as sphinx is ready
-        $(document).on("sphinxReady", function(){
+        $(document).on("sphinxReady", function () {
             console.debug('Event Sphinx ready');
 //            startRecording('Base Commands Keywords');
             var endTime = new Date();
-            console.debug('Sphinx Startup time: ',endTime-startTime+'ms');
+            console.debug('Sphinx Startup time: ', endTime - startTime + 'ms');
         });
         // initialize sphinx
         startSphinx();
     }
 }
 
-function getRSS(rssUrl){
+function getRSS(rssUrl) {
     $.getFeed({
         url: rssUrl,
-        success: function(feed) {
+        success: function (feed) {
 //            console.debug("RSS: " + feed.title);
             $('#rss-content').empty();
             $('#rss-content').append('<h2>' + feed.title + '</h2>');
-            for (var i = 0; i < feed.items.length && i < 8; i++){
-                appendRSSItem('#rss-content',feed.items[i],i);
+            for (var i = 0; i < feed.items.length && i < 8; i++) {
+                appendRSSItem('#rss-content', feed.items[i], i);
             }
 //            console.debug(feed);
-       }
+        }
     });
 }
 
-function appendRSSItem(elem,item,nr){
-    if (nr === undefined){
+function appendRSSItem(elem, item, nr) {
+    if (nr === undefined) {
         nr = 0;
     }
     var html = '';
-    
+
     html += '<div class="rss-entry">'
-    + '<h3>'
+            + '<h3>'
 //    + '<a href="' + item.link + '">'
-    + item.title
+            + item.title
 //    + '</a>'
-    + '</h3>'
-    + '</div>';
+            + '</h3>'
+            + '</div>';
     html = $(html);
-    html.css('animation-delay',nr*100+'ms');
-    html.click(function(){
+    html.css('animation-delay', nr * 100 + 'ms');
+    html.click(function () {
         showArticle(item.link);
     });
     $(elem).append(html);
 }
 
-function getReddit(sub){
-    
-    $.get('https://www.reddit.com/r/'+ sub +'.json',function(res){
+function getReddit(sub) {
+
+    $.get('https://www.reddit.com/r/' + sub + '.json', function (res) {
 //        console.debug(sub);
         $('.reddit-content').empty();
         var res = res.data.children;
-        for (var i = 0; i < res.length; i++){
+        for (var i = 0; i < res.length; i++) {
 //            console.debug(res[i]);
-            appendRedditItem('.reddit-content',res[i],i);
+            appendRedditItem('.reddit-content', res[i], i);
         }
     });
 }
 
-function appendRedditItem(elem,item,nr){
-    if (nr === undefined){
+function appendRedditItem(elem, item, nr) {
+    if (nr === undefined) {
         nr = 0;
     }
     var html = '';
-    
+
     html += '<div class="reddit-entry">'
-    + '<img class="thumbnail" src="'
-    + item.data.thumbnail
-    + '"/>'
-    + '<h3>'
-    + item.data.title
-    + '</h3>'
-    + '<p>'
-    + 'comments'
-    + '</p>'
-    + '</div>';
+            + '<img class="thumbnail" src="'
+            + item.data.thumbnail
+            + '"/>'
+            + '<h3>'
+            + item.data.title
+            + '</h3>'
+            + '<p>'
+            + 'comments'
+            + '</p>'
+            + '</div>';
     html = $(html);
-    html.css('animation-delay',nr*100+'ms');
-    html.click(function(){
+    html.css('animation-delay', nr * 100 + 'ms');
+    html.click(function () {
         showArticle(item.link);
     });
     $(elem).append(html);
 }
 
 // Generate random id
-function rid(){
+function rid() {
     var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     var id = '';
-    for (var i = 0; i < 16; i++){
+    for (var i = 0; i < 16; i++) {
         id += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     return id;
 }
 
-function getWeather(cityID){
-    
-    $.getJSON('http://api.openweathermap.org/data/2.5/weather?id=' + cityID + '&appid=e7bd0ec8e9425f345f1215e18dcf4871&units=metric',function(res){
+function getWeather(cityID) {
+
+    $.getJSON('http://api.openweathermap.org/data/2.5/weather?id=' + cityID + '&appid=e7bd0ec8e9425f345f1215e18dcf4871&units=metric', function (res) {
         $('#weather-current').empty();
 //        console.debug(res);
         var html = ''
         html += res.name + ' '
-        + res.main.temp + ' '
-        + res.weather[0].description;
+                + res.main.temp + ' '
+                + res.weather[0].description;
         $('#weather-current').append(html);
 //        console.debug(html);
     });
-    $.getJSON('http://api.openweathermap.org/data/2.5/forecast?id=' + cityID + '&appid=e7bd0ec8e9425f345f1215e18dcf4871&units=metric',function(res){
+    $.getJSON('http://api.openweathermap.org/data/2.5/forecast?id=' + cityID + '&appid=e7bd0ec8e9425f345f1215e18dcf4871&units=metric', function (res) {
         $('#weather-forcast').empty();
 //        console.debug(res);
-        
+
     });
 }
 
-function showOverlay(){
+function showOverlay() {
     $('#overlay').show();
     $('#mirrortop').removeClass('unblur');
     $('#mirrortop').addClass('blur');
 }
 
-function hideOverlay(){
+function hideOverlay() {
     $('#overlay').hide();
     $('#mirrortop').removeClass('blur');
     $('#mirrortop').addClass('unblur');
-    
+
 }
 
-function showArticle(url){
+function showArticle(url) {
     $('#overlay').hide();
     $('#news-wrap').empty();
-    
-    getArticle(url,function(response){
+
+    getArticle(url, function (response) {
         console.debug(response);
         $('#news-wrap').html(response);
         showOverlay();
         $('#news-wrap').show();
     })
-    
+
 }
 
-function setVoiceStatus(status){
-    switch (status){
+function setVoiceStatus(status) {
+    switch (status) {
         case 'initializing':
             $('#voice-status').html('<div class="spinner"></div>');
             break;
@@ -312,7 +276,95 @@ function setVoiceStatus(status){
             break;
         default:
             $('#voice-status').html('Error');
-            console.error('setVoiceStatus',status,'not recognized');
+            console.error('setVoiceStatus', status, 'not recognized');
             break;
+    }
+}
+
+function setHand(point) {
+    var x = point.x + (window.innerWidth / 2);
+    var y = -1 * point.y + (window.innerHeight);
+    $('#left-hand').offset({left: x, top: y});
+//    console.debug('Point:',x,y);
+}
+
+// Set finger(1-5, counting from thumb, 0 for palm) cursor position for each hand
+// Hand - string 'left' or 'right'
+// finger - integer
+function setGestureCursor(hand, finger, point) {
+    // Adjust leap real space coordinates top application coordinates
+    appPoint = screen(point);
+    var x = appPoint.x;
+    var y = appPoint.y;
+//    var x = point.x + (window.innerWidth / 2);
+//    var y = -1 * point.y + (window.innerHeight);
+    switch (hand) {
+        case 'left':
+            switch (finger) {
+                case 0:
+                    $('#left-hand').offset({left: x, top: y});
+                    break;
+                case 1:
+                    $('#left-finger-1').offset({left: x, top: y});
+                    break;
+                case 2:
+                    $('#left-finger-2').offset({left: x, top: y});
+                    break;
+                case 3:
+                    $('#left-finger-3').offset({left: x, top: y});
+                    break;
+                case 4:
+                    $('#left-finger-4').offset({left: x, top: y});
+                    break;
+                case 5:
+                    $('#left-finger-5').offset({left: x, top: y});
+                    break;
+            }
+            break;
+        case 'right':
+            switch (finger) {
+                case 0:
+                    $('#right-hand').offset({left: x, top: y});
+                    $('#app-point').text(x + ';' + y);
+                    break;
+                case 1:
+                    $('#right-finger-1').offset({left: x, top: y});
+                    break;
+                case 2:
+                    $('#right-finger-2').offset({left: x, top: y});
+                    break;
+                case 3:
+                    $('#right-finger-3').offset({left: x, top: y});
+                    break;
+                case 4:
+                    $('#right-finger-4').offset({left: x, top: y});
+                    break;
+                case 5:
+                    $('#right-finger-5').offset({left: x, top: y});
+                    break;
+            }
+            break;
+    }
+//    console.debug(cursor,x,y)
+}
+
+function updateLeapDebug(frame, data) {
+    if (frame !== undefined) {
+        $('#leap-timestamp').text(frame.timestamp);
+        if (frame.hands !== undefined) {
+            $('#leap-hand-count').text(frame.hands.length);
+        } else {
+            $('#leap-hand-count').text(0);
+        }
+        try {
+            $('#finger-position').text(frame.hands[0].fingers[1].stabilizedTipPosition);
+        } catch (error) {
+        }
+
+    }
+    if (data != undefined) {
+        if (data.waiting !== undefined) {
+            $('#leap-calibration-waiting').text(data.waiting);
+        }
     }
 }
