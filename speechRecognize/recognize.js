@@ -23,6 +23,30 @@
 
 'use strict';
 
+function testRecord()
+{
+
+var rec       = require('node-record-lpcm16'),
+    request   = require('request');
+
+var witToken = '7FUGL22DSV4NNLTXLYTPR2AC6OFSFDBX' //process.env.WIT_TOKEN; // get one from wit.ai!
+
+exports.parseResult = function (err, resp, body) {
+  console.log(body);
+};
+
+rec.start({recordProgram: 'sox', verbose: true}).pipe(request.post({
+  'url'     : 'https://api.wit.ai/speech?client=chromium&lang=en-us&output=json',
+  'headers' : {
+    // 'Accept'        : 'application/vnd.wit.20160202+json',
+    'Authorization' : 'Bearer ' + witToken,
+    'Content-Type'  : 'audio/wav'
+  }
+}, exports.parseResult));
+
+console.log('Recording, press Ctrl+C to stop.');
+}
+
 function syncRecognize (filename, encoding, sampleRateHertz, languageCode) {
   // [START speech_sync_recognize]
   // Imports the Google Cloud client library
@@ -319,6 +343,12 @@ const cli = require(`yargs`)
     `Detects speech in a microphone input stream. This command requires that you have SoX installed and available in your $PATH. See https://www.npmjs.com/package/node-record-lpcm16#dependencies`,
     {},
     (opts) => streamingMicRecognize(opts.encoding, opts.sampleRateHertz, opts.languageCode)
+  )
+    .command(
+    `test`,
+    `Test record and wit.ai.`,
+    {},
+    (opts) => testRecord()
   )
   .options({
     encoding: {
