@@ -44,7 +44,7 @@ var isSecureOrigin = true;
 
 var constraints = {
   audio: true,
-  video: true
+  video: false
 };
 
 function handleSuccess(stream) {

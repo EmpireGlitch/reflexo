@@ -12,6 +12,21 @@ body{
     animation-fill-mode: forwards;
 }
 
+.left{
+    float: left;
+}
+
+.right{
+    float: right;
+}
+
+.clear:after{
+    content: "";
+    display: block;
+    clear: both;
+    float: none;
+}
+
 .unblur{
     animation-name: blur;
     animation-duration: 500ms;
@@ -192,8 +207,20 @@ h2{
     position: absolute;
     width: 120px;
     min-height: 150px;
-    padding: 15px 3px;
+    padding: 0px 3px;
     top: 150px;
+}
+
+.debug#sphinx-debug{
+    left: 127px;
+}
+
+.debug#leap-debug{
+    left: 254px;
+}
+
+.debug p{
+    margin: 0;
 }
 
 .button{
@@ -208,6 +235,63 @@ h2{
     border: solid 1px white;
     line-height: 40px;
 }
+
+/* Leap motion cursor */
+
+.cursor-hand{
+    position: absolute;
+    background: blue;
+    width: 9px;
+    height: 9px;
+    z-index: 5000;
+}
+
+.cursor-finger{
+    position: absolute;
+    background: red;
+    width: 5px;
+    height: 5px;
+    z-index: 5000;
+}
+
+.calibration-overlay{
+    position: absolute;
+    display: none;
+    background: rgba(0,0,0,0.8);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.calibration-target{
+    width: 9px;
+    height: 9px;
+    border: solid white 2px;
+    padding: 2px;
+    background: black;
+    z-index: 5100;
+    position: absolute;
+}
+
+.calibration-target#tl{
+    top:0;
+    left:0;
+}
+.calibration-target#tr{
+    top:0;
+    right: 0;
+}
+.calibration-target#br{
+    bottom: 0;
+    right: 0;
+}
+.calibration-target#bl{
+    bottom: 0;
+    left: 0;
+}
+    
+
 
 @-webkit-keyframes sk-rotateplane {
   0% { -webkit-transform: perspective(120px) }
