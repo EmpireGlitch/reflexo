@@ -325,10 +325,13 @@ function setGestureCursor(hand, finger, point) {
             switch (finger) {
                 case 0:
                     $('#right-hand').offset({left: x, top: y});
-                    $('#app-point').text(x + ';' + y);
                     break;
                 case 1:
                     $('#right-finger-1').offset({left: x, top: y});
+                    // Debug code
+                    var normalized = normalize(point);
+                    $('#normalized-point').text(normalized.x + ';' + normalized.y);
+                    $('#app-point').text(x + ';' + y);
                     break;
                 case 2:
                     $('#right-finger-2').offset({left: x, top: y});

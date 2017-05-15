@@ -5,8 +5,10 @@ var TestFrame;
 var calibration = {};
 
 function initLeap() {
-    calibrateScreen({x:-200,y:400},{x:163,y:364},{x:-178,y:100},{x:179,y:100},5);
+//    calibrateScreen({x:-200,y:400},{x:163,y:364},{x:-178,y:100},{x:179,y:100},5);
+    calibrateScreen({x:-170,y:355},{x:185,y:390},{x:-180,y:102},{x:200,y:100},5);
     controller.on('deviceFrame', function (frame) {
+//    controller.on('animationFrame', function (frame) {
         
         if (doOutput) {
             testFrame = frame;
@@ -119,10 +121,8 @@ function normalize(leapPoint) {
     if (calibration.vRange === undefined || calibration.hRange === undefined) {
         console.error('Incomplete calibration');
     }
-//    var y = (leapPoint.y - calibration.vStart) / calibration.vRange;
-//    var x = (leapPoint.x - calibration.hStart) / calibration.hRange;
     var x = ( leapPoint.x + (calibration.hRange / 2) )/ calibration.hRange;
-    var y = 1 - leapPoint.y / calibration.vRange;
+    var y = 1 - ( leapPoint.y - calibration.vStart)/ calibration.vRange;
 
     return {x: x.toFixed(3), y: y.toFixed(3)};
 }
