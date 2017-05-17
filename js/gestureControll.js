@@ -6,7 +6,7 @@ var calibration = {};
 
 function initLeap() {
 //    calibrateScreen({x:-200,y:400},{x:163,y:364},{x:-178,y:100},{x:179,y:100},5);
-    calibrateScreen({x:-170,y:355},{x:185,y:390},{x:-180,y:102},{x:200,y:100},5);
+    calibrateScreen({x:-170,y:355},{x:185,y:390},{x:200,y:100},{x:-180,y:102},5);
     controller.on('deviceFrame', function (frame) {
 //    controller.on('animationFrame', function (frame) {
         
@@ -103,9 +103,9 @@ function calibrateScreen(tl,tr,br,bl,edge) {
     calibration.vEnd = (tl.y + tr.y) / 2;
     calibration.vRange = calibration.vEnd - calibration.vStart;
 
-    calibration.hStart = (bl.x + br.x) / 2;
-    calibration.hEnd = (tl.x + tr.x) / 2;
-    calibration.hRange = calibration.vEnd - calibration.vStart;
+    calibration.hStart = (bl.x + tl.x) / 2;
+    calibration.hEnd = (br.x + tr.x) / 2;
+    calibration.hRange = calibration.hEnd - calibration.hStart;
 
     calibration.sensitivity = (((window.innerHeight - edge) / calibration.vRange) + ((window.innerWidth - edge) / calibration.hRange)) / 2;
 
