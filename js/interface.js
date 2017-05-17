@@ -247,6 +247,7 @@ function hideOverlay() {
     $('#overlay').hide();
     $('#mirrortop').removeClass('blur');
     $('#mirrortop').addClass('unblur');
+    $('#overlay  > *').empty();
 
 }
 
@@ -259,7 +260,7 @@ function showArticle(url) {
         $('#news-wrap').html(response);
         showOverlay();
         $('#news-wrap').show();
-    })
+    });
 
 }
 
