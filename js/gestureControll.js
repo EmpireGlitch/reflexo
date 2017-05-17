@@ -17,8 +17,31 @@ function initLeap() {
         
         updateLeapDebug(frame);
         
+        var hands = frame.hands;
+        
+        // Show hand cursors if hand is detected
+        if (hands.length < 2){
+            if (hands.length === 0){
+                hideLeftHand();
+                hideRightHand();
+            }
+            else if (hands.length === 1){
+                if (hands[0].type === 'left'){
+                    showLeftHand();
+                    hideRightHand();
+                }
+                else{
+                    showRightHand();
+                    hideLeftHand();
+                }
+            }
+        }
+        else if (hands.length === 2){
+            showRightHand();
+            showLeftHand();
+        }
+        
         // Set finger and palm cursors
-        var hands = frame.hands
         for (var i = 0; i < hands.length; i++){
             var hand = hands[i];
             var target = hand.stabilizedPalmPosition;
