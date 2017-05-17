@@ -101,10 +101,16 @@ $(document).ready(function () {
     // Load voice recignition
 //    initializeVoice();
 
-
-
     initLeap();
+    
+    var child_process = require('child_process');
 
+    var py = child_process.spawn('python', [appRoot+'py-test\hello.py', 'me']);
+    py.on('close',function(){
+        console.debug('python done');
+    });
+
+    
 });
 
 controller.connect();
@@ -370,4 +376,20 @@ function updateLeapDebug(frame, data) {
             $('#leap-calibration-waiting').text(data.waiting);
         }
     }
+}
+
+function showLeftHand(){
+    $('#left-hand').show();
+}
+
+function hideLeftHand(){
+    $('#left-hand').hide();
+}
+
+function showRightHand(){
+    $('#right-hand').show();
+}
+
+function hideRightHand(){
+    $('#right-hand').hide();
 }
