@@ -257,11 +257,13 @@ h2{
     width: 5px;
     height: 5px;
     z-index: 5000;
+    margin: -2px;
 }
 
 .active-cursor{
     border: solid white 3px;
     padding: 3px;
+    margin: -8px;
     /*border-radius: 50%;*/
 }
 
@@ -301,8 +303,35 @@ h2{
     bottom: 0;
     left: 0;
 }
-    
 
+/*ScrollBars*/
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+ 
+/* Track */
+::-webkit-scrollbar-track {
+    background-color: rgba(255,255,255,0.4);
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,1); 
+}
+::-webkit-scrollbar-thumb:window-inactive {
+	background: rgba(255,255,255,0.6); 
+}
+
+.click-ripple{
+    position: absolute;
+    background: white;
+    animation-name: click-ripple;
+    animation-duration: 1s;
+    width: 1px;
+    height: 1px;
+    -webkit-transform-origin: 50% 50%;
+}
 
 @-webkit-keyframes sk-rotateplane {
   0% { -webkit-transform: perspective(120px) }
@@ -341,5 +370,15 @@ h2{
     }
     100%{
         -webkit-transform: perspective(500px) translateZ(0px);
+    }
+}
+
+@keyframes click-ripple{
+    0%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+        -webkit-transform: scale(41);
     }
 }

@@ -17,14 +17,14 @@ $(document).ready(function () {
 
     // Debug buttons
     var mainDebug = new debugFrame('Debug')
-    
+
     // Reload mirror page
-    mainDebug.addButton('Reload',function(){
+    mainDebug.addButton('Reload', function () {
         location.reload();
     });
 
     // Sphinx test page
-    mainDebug.addButton('Sphinx',function(){
+    mainDebug.addButton('Sphinx', function () {
         showOverlay();
         $('#overlay *').hide();
         $('#sphinx-wrap').append('<iframe class="web-page" src="sphinx-test/live.html"></iframe>');
@@ -32,15 +32,15 @@ $(document).ready(function () {
     });
 
     // Anayng test page
-    mainDebug.addButton('Anyang',function(){
+    mainDebug.addButton('Anyang', function () {
         showOverlay();
         $('#overlay *').hide();
         $('#sphinx-wrap').append('<iframe class="web-page" src="anyangTest/TestAnnayang.html"></iframe>');
         $('#sphinx-wrap').show();
     });
-    
+
     // Recorder test page
-    mainDebug.addButton('Recorder',function(){
+    mainDebug.addButton('Recorder', function () {
         showOverlay();
         $('#overlay *').hide();
         $('#sphinx-wrap').append('<iframe class="web-page" src="recorder/index.html"></iframe>');
@@ -49,11 +49,11 @@ $(document).ready(function () {
 
     // Sphinx debug frame
     var sphinxDebug = new debugFrame('Sphinx');
-    
-    sphinxDebug.addButton('Start',function(){
+
+    sphinxDebug.addButton('Start', function () {
         startRecording('Base Commands');
     });
-    sphinxDebug.addButton('Stop',function(){
+    sphinxDebug.addButton('Stop', function () {
         stopRecording();
     });
 
@@ -70,7 +70,7 @@ $(document).ready(function () {
 
     // Make popups dissapear when click on size/"blank" space
     $('#overlay').click(function () {
-        console.debug('click');
+//        console.debug('click');
         hideOverlay();
     });
     $("#overlay *").click(function (e) {
@@ -101,15 +101,17 @@ $(document).ready(function () {
 
     // Load gesture controll
     initLeap();
-    
+
     var child_process = require('child_process');
 
-    var py = child_process.spawn('python', [appRoot+'py-test\hello.py', 'me']);
-    py.on('close',function(){
+    var py = child_process.spawn('python', [appRoot + 'py-test\hello.py', 'me']);
+    py.on('close', function () {
         console.debug('python done');
     });
 
-    
+    $(document).click(function (e) {
+        clickRipple({x:e.pageX, y:e.pageY});
+    });
 });
 
 controller.connect();
@@ -247,7 +249,7 @@ function showArticle(url) {
     $('#news-wrap').empty();
 
     getArticle(url, function (response) {
-        console.debug(response);
+//        console.debug(response);
         $('#news-wrap').html(response);
         showOverlay();
         $('#news-wrap').show();
@@ -279,6 +281,7 @@ function setVoiceStatus(status) {
     }
 }
 
+// Deprecated
 function setHand(point) {
     var x = point.x + (window.innerWidth / 2);
     var y = -1 * point.y + (window.innerHeight);
@@ -326,13 +329,13 @@ function setGestureCursor(hand, finger, point) {
                     break;
                 case 1:
                     $('#right-finger-1').offset({left: x, top: y});
-                    // Debug code
-                    var normalized = normalize(point);
-                    leapDebug.setValue('nPoint',normalized.x + ';' + normalized.y);
-                    leapDebug.setValue('aPoint',x + ';' + y);
                     break;
                 case 2:
                     $('#right-finger-2').offset({left: x, top: y});
+                    var normalized = normalize(point);
+                    // Debug code
+                    leapDebug.setValue('nPoint', normalized.x + ';' + normalized.y);
+                    leapDebug.setValue('aPoint', x + ';' + y);
                     break;
                 case 3:
                     $('#right-finger-3').offset({left: x, top: y});
@@ -370,18 +373,30 @@ function updateLeapDebug(frame, data) {
     }
 }
 
-function showLeftHand(){
+function showLeftHand() {
     $('#left-hand').show();
 }
 
-function hideLeftHand(){
+function hideLeftHand() {
     $('#left-hand').hide();
 }
 
-function showRightHand(){
+function showRightHand() {
     $('#right-hand').show();
 }
 
-function hideRightHand(){
+function hideRightHand() {
     $('#right-hand').hide();
+}
+
+function clickRipple(point) {
+    var ripple = $('<div class="click-ripple"></div>');
+    ripple.offset({left: point.x, top: point.y});
+    $('html').append(ripple);
+
+    $('.click-ripple').on("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function (e) {
+        console.debug('done');
+        $(this).remove();
+        $(this).off(e);
+    });
 }
