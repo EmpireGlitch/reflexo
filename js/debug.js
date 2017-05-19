@@ -5,7 +5,6 @@ function getWidthSum() {
     for (var i = 0; i < debugFrameList.length-1; i++) {
         sum += debugFrameList[0].jObject().outerWidth();
     }
-    console.debug(sum);
     return sum;
 }
 
@@ -67,7 +66,7 @@ function debugFrame(name) {
         this.data({type: 'text', title: title, value: value}, showTitle);
     };
     this.addButton = function (title, funct) {
-        this.data({type: 'button', title: title, funct: funct})
+        this.data({type: 'button', title: title, funct: funct});
     };
     this.show();
 
@@ -118,7 +117,7 @@ function debugButton(data) {
     this.add = function (parent) {
         parent.append('<div class="button" id="' + this.id + '">' + this.title + '</div>');
         this.jObject().click(this.funct);
-    }
+    };
 }
 
 function debugText(data) {
@@ -149,7 +148,6 @@ function debugText(data) {
         html += '<p class="left" id="' + this.id + '">' +
                 this.value +
                 '</p>';
-//        console.debug(parent, showTitle, html);
         parent.append(html);
     };
 }
