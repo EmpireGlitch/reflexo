@@ -16,6 +16,10 @@ body{
     float: left;
 }
 
+.selected{
+    border: solid white 3px;
+}
+
 .right{
     float: right;
 }
@@ -234,6 +238,7 @@ h2{
     text-align: center;
     border: solid 1px white;
     line-height: 40px;
+    cursor: pointer;
 }
 
 /* Leap motion cursor */
@@ -252,6 +257,12 @@ h2{
     width: 5px;
     height: 5px;
     z-index: 5000;
+}
+
+.active-cursor{
+    border: solid white 3px;
+    padding: 3px;
+    /*border-radius: 50%;*/
 }
 
 .calibration-overlay{

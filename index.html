@@ -13,54 +13,22 @@
                 <div id="voice-command"></div>
                 <div id="voice-status"><div class="spinner"></div></div>
             </div>
-            <div class="frame debug draggable" id="main-debug">
-                <h2>Debug</h2>
-                <div class="button" id="reload-button">Reload</div>
-                <div class="button" id="show-sphinx-test">Sphinx</div>
-                <div class="button" id="show-anyang-test">Anyang</div>
-                <div class="button" id="show-recorder-test">Recorder</div>
-            </div>
-            <div class="frame debug draggable" id="sphinx-debug">
-                <h2>Sphinx</h2>
-                <div class="button" id="start-sphinx-button">Start</div>
-                <div class="button" id="stop-sphinx-button">Stop</div>
-            </div>
-            <div class="frame debug draggable" id="leap-debug">
-                <h2>Leap</h2>
-                <div class="entry clear">
-                    <p class="left" id="leap-timestamp"></p>
-                </div>
-                <div class="entry clear">
-                <p class="left" >hands: </p>
-                <p class="left" id="leap-hand-count">0</p>
-                </div>
-                <div class="entry clear">
-                <p class="left" >waiting: </p>
-                <p class="left" id="leap-calibration-waiting">false</p>
-                </div>
-                <div class="entry">
-                    <p class="left" id="finger-position"></p>
-                </div>
-                <div class="entry">
-                    <p class="left" id="app-point"></p>
-                </div>
-            </div>
-            
+
             <div id="rss-wrap" class="frame draggable">
                 <!--<h2> RSS </h2>-->
                 <div id="rss-content">
                     <div class="spinner"></div>
                 </div>
             </div>
-            
-<!--            <div class="reddit-wrap frame draggable">
-                <div class="reddit-content">
-                    <div class="spinner"></div>
-                </div>
-            </div>-->
+
+            <!--            <div class="reddit-wrap frame draggable">
+                            <div class="reddit-content">
+                                <div class="spinner"></div>
+                            </div>
+                        </div>-->
 
             <div id="weather-wrap" class="frame draggable">
-<!--                <!--<h2> Weather </h2>-->
+                <!--                <!--<h2> Weather </h2>-->
                 <div id="weather-content">
                     <div id="weather-current">
                         <div class="spinner"></div>
@@ -68,53 +36,59 @@
                     <div id="weather-forcast">
                         <div class="spinner"></div>
                     </div>
-                    
+
                 </div>
 
             </div>
 
-<!--            <div id="gallery-wrap" class="frame draggable">
-                <div class="image-wrap">
-                    <div class="spinner"></div>
-                </div>
-            </div>-->
+            <!--            <div id="gallery-wrap" class="frame draggable">
+                            <div class="image-wrap">
+                                <div class="spinner"></div>
+                            </div>
+                        </div>-->
         </div>
         <div id="overlay">
             <div class="popup draggable" id="news-wrap"></div>
             <div class="popup draggable iframe-wrap" id="sphinx-wrap"></div>
         </div>
-        <div class="cursor-hand" id="right-hand"></div>
-        <div class="cursor-hand" id="left-hand"></div>
-        <div class="cursor-finger" id="right-finger-1"></div>
-        <div class="cursor-finger" id="right-finger-2"></div>
-        <div class="cursor-finger" id="right-finger-3"></div>
-        <div class="cursor-finger" id="right-finger-4"></div>
-        <div class="cursor-finger" id="right-finger-5"></div>
-        <div class="cursor-finger" id="left-finger-1"></div>
-        <div class="cursor-finger" id="left-finger-2"></div>
-        <div class="cursor-finger" id="left-finger-3"></div>
-        <div class="cursor-finger" id="left-finger-4"></div>
-        <div class="cursor-finger" id="left-finger-5"></div>
-        
+        <div class="cursor-hand" id="right-hand">
+            <div class="cursor-finger" id="right-finger-1"></div>
+            <div class="cursor-finger active-cursor" id="right-finger-2"></div>
+            <div class="cursor-finger" id="right-finger-3"></div>
+            <div class="cursor-finger" id="right-finger-4"></div>
+            <div class="cursor-finger" id="right-finger-5"></div>
+        </div>
+        <div class="cursor-hand" id="left-hand">
+            <div class="cursor-finger" id="left-finger-1"></div>
+            <div class="cursor-finger" id="left-finger-2"></div>
+            <div class="cursor-finger" id="left-finger-3"></div>
+            <div class="cursor-finger" id="left-finger-4"></div>
+            <div class="cursor-finger" id="left-finger-5"></div>
+        </div>
+
+
+
         <div class="calibration-overlay">
             <div class="calibration-target" id="tl"></div>
             <div class="calibration-target" id="tr"></div>
             <div class="calibration-target" id="bl"></div>
             <div class="calibration-target" id="br"></div>
         </div>
-        
+
         <script>window.$ = window.jQuery = require('jquery');</script>
         <!--<script src="js/jquery-3.1.1.min.js"></script>-->
         <script src="js/jquery-ui.min.js"></script>
         <script src="js/jquery.jfeed.js"></script>
+        <script src="js/debug.js"></script>
         <!--<script src="http://js.leapmotion.com/leap-plugins-0.1.12.js"></script>-->
         <script src="js/newsParser.js"></script>
         <script src="js/gestureControll.js"></script>
         
+
         <script src="js/sphinx/audioRecorder.js"></script>
         <script src="js/sphinx/callbackManager.js"></script>
         <script src="js/voiceRecognition.js"></script>
-        
+
         <script src="js/interface.js"></script>
     </body>
 </html>

@@ -16,45 +16,44 @@ $(document).ready(function () {
     })();
 
     // Debug buttons
+    var mainDebug = new debugFrame('Debug')
+    
+    // Reload mirror page
+    mainDebug.addButton('Reload',function(){
+        location.reload();
+    });
+
     // Sphinx test page
-    $('#show-sphinx-test').click(function () {
+    mainDebug.addButton('Sphinx',function(){
         showOverlay();
         $('#overlay *').hide();
         $('#sphinx-wrap').append('<iframe class="web-page" src="sphinx-test/live.html"></iframe>');
         $('#sphinx-wrap').show();
-
     });
 
     // Anayng test page
-    $('#show-anyang-test').click(function () {
+    mainDebug.addButton('Anyang',function(){
         showOverlay();
         $('#overlay *').hide();
         $('#sphinx-wrap').append('<iframe class="web-page" src="anyangTest/TestAnnayang.html"></iframe>');
         $('#sphinx-wrap').show();
-
     });
-
+    
     // Recorder test page
-    $('#show-recorder-test').click(function () {
+    mainDebug.addButton('Recorder',function(){
         showOverlay();
         $('#overlay *').hide();
         $('#sphinx-wrap').append('<iframe class="web-page" src="recorder/index.html"></iframe>');
         $('#sphinx-wrap').show();
-
-    });
-
-    // Reload mirror page
-    $('#reload-button').click(function () {
-        location.reload();
     });
 
     // Sphinx debug frame
-    // Start Sphinx listening
-    $('#start-sphinx-button').click(function () {
+    var sphinxDebug = new debugFrame('Sphinx');
+    
+    sphinxDebug.addButton('Start',function(){
         startRecording('Base Commands');
     });
-    // Stop Sphinx listening
-    $('#stop-sphinx-button').click(function () {
+    sphinxDebug.addButton('Stop',function(){
         stopRecording();
     });
 
@@ -67,7 +66,6 @@ $(document).ready(function () {
 
     // Load Reddit feed
     getReddit('videos');
-
 
 
     // Make popups dissapear when click on size/"blank" space
@@ -101,10 +99,17 @@ $(document).ready(function () {
     // Load voice recignition
 //    initializeVoice();
 
-
-
+    // Load gesture controll
     initLeap();
+    
+    var child_process = require('child_process');
 
+    var py = child_process.spawn('python', [appRoot+'py-test\hello.py', 'me']);
+    py.on('close',function(){
+        console.debug('python done');
+    });
+
+    
 });
 
 controller.connect();
@@ -202,15 +207,7 @@ function appendRedditItem(elem, item, nr) {
     $(elem).append(html);
 }
 
-// Generate random id
-function rid() {
-    var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    var id = '';
-    for (var i = 0; i < 16; i++) {
-        id += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return id;
-}
+
 
 function getWeather(cityID) {
 
@@ -241,6 +238,7 @@ function hideOverlay() {
     $('#overlay').hide();
     $('#mirrortop').removeClass('blur');
     $('#mirrortop').addClass('unblur');
+    $('#overlay  > *').empty();
 
 }
 
@@ -253,7 +251,7 @@ function showArticle(url) {
         $('#news-wrap').html(response);
         showOverlay();
         $('#news-wrap').show();
-    })
+    });
 
 }
 
@@ -325,10 +323,13 @@ function setGestureCursor(hand, finger, point) {
             switch (finger) {
                 case 0:
                     $('#right-hand').offset({left: x, top: y});
-                    $('#app-point').text(x + ';' + y);
                     break;
                 case 1:
                     $('#right-finger-1').offset({left: x, top: y});
+                    // Debug code
+                    var normalized = normalize(point);
+                    leapDebug.setValue('nPoint',normalized.x + ';' + normalized.y);
+                    leapDebug.setValue('aPoint',x + ';' + y);
                     break;
                 case 2:
                     $('#right-finger-2').offset({left: x, top: y});
@@ -367,4 +368,20 @@ function updateLeapDebug(frame, data) {
             $('#leap-calibration-waiting').text(data.waiting);
         }
     }
+}
+
+function showLeftHand(){
+    $('#left-hand').show();
+}
+
+function hideLeftHand(){
+    $('#left-hand').hide();
+}
+
+function showRightHand(){
+    $('#right-hand').show();
+}
+
+function hideRightHand(){
+    $('#right-hand').hide();
 }
