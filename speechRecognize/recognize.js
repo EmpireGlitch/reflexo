@@ -29,13 +29,19 @@ function testRecord()
 var rec       = require('node-record-lpcm16'),
     request   = require('request');
 
+
+
 var witToken = '7FUGL22DSV4NNLTXLYTPR2AC6OFSFDBX' //process.env.WIT_TOKEN; // get one from wit.ai!
 
 exports.parseResult = function (err, resp, body) {
   console.log(body);
 };
 
-rec.start({recordProgram: 'sox', verbose: true}).pipe(request.post({
+let fs = require('fs');
+let Mic = require('node-microphone');
+let mic = new Mic({'debug': true });
+let micStream = mic.startRecording();
+micStream.pipe(request.post({
   'url'     : 'https://api.wit.ai/speech?client=chromium&lang=en-us&output=json',
   'headers' : {
     // 'Accept'        : 'application/vnd.wit.20160202+json',
@@ -43,6 +49,18 @@ rec.start({recordProgram: 'sox', verbose: true}).pipe(request.post({
     'Content-Type'  : 'audio/wav'
   }
 }, exports.parseResult));
+micStream.pipe(fs.createWriteStream('test.wav') )
+setTimeout(() => {
+    //logger.info('stopped recording');
+    console.log('stopped writing')
+    mic.stopRecording();
+}, 6000);
+mic.on('info', (info) => {
+	console.log('INFO ' + info);
+});
+mic.on('error', (error) => {
+	console.log(error);
+});
 
 console.log('Recording, press Ctrl+C to stop.');
 }
@@ -296,7 +314,7 @@ function streamingMicRecognize (encoding, sampleRateHertz, languageCode) {
       threshold: 0,
       // Other options, see https://www.npmjs.com/package/node-record-lpcm16#options
       verbose: false,
-      recordProgram: 'rec', // Try also "arecord" or "sox"
+      recordProgram: 'sox', // Try also "arecord" or "sox"
       silence: '10.0'
     })
     .on('error', console.error)
@@ -304,6 +322,192 @@ function streamingMicRecognize (encoding, sampleRateHertz, languageCode) {
 
   console.log('Listening, press Ctrl+C to stop.');
   // [END speech_streaming_mic_recognize]
+}
+
+function newRecor0d(encoding, sampleRateHertz, languageCode)
+{
+  const Speech = require('@google-cloud/speech');
+  // Instantiates a client
+  const speech = Speech();
+  const request = {
+    config: {
+      encoding: encoding,
+      sampleRateHertz: sampleRateHertz,
+      languageCode: languageCode
+    },
+    interimResults: true // If you want interim results, set this to true
+  };
+
+  // Create a recognize stream
+  const recognizeStream = speech.createRecognizeStream(request)
+    .on('error', console.error)
+    .on('data', (data) => process.stdout.write(data.results));
+
+let Mic = require('node-microphone');
+let fs = require('fs');
+let mic = new Mic();
+let micStream = mic.startRecording();
+let sox = require('sox-stream');
+
+fs.createReadStream('song.wav')
+    .pipe( sox({ output: { type: 'wav' }, effects: ['speed', 1.5] }) )
+    .pipe( fs.createWriteStream('song.wav') );
+
+micStream.pipe( recognizeStream );
+
+setTimeout(() => {
+  console.log('stopped recording');
+  mic.stopRecording();
+}, 5000);
+
+mic.on('info', (info) => {
+     console.log(info);
+});
+
+mic.on('error', (error) => {
+    console.log(error);
+});
+}
+
+function newRecordSHOT()
+{
+  var mic = require('mic');
+var fs = require('fs');
+ 
+var micInstance = mic({ 'rate': '16000', 'channels': '1', 'debug': true, 'exitOnSilence': 6 });
+var micInputStream = micInstance.getAudioStream();
+ 
+var outputFileStream = fs.WriteStream('output.raw');
+ 
+micInputStream.pipe(outputFileStream);
+ 
+micInputStream.on('data', function(data) {
+    console.log("Recieved Input Stream: " + data.length);
+});
+ 
+micInputStream.on('error', function(err) {
+    cosole.log("Error in Input Stream: " + err);
+});
+ 
+micInputStream.on('startComplete', function() {
+        console.log("Got SIGNAL startComplete");
+        setTimeout(function() {
+                micInstance.pause();
+            }, 5000);
+    });
+    
+micInputStream.on('stopComplete', function() {
+        console.log("Got SIGNAL stopComplete");
+    });
+    
+micInputStream.on('pauseComplete', function() {
+        console.log("Got SIGNAL pauseComplete");
+        setTimeout(function() {
+                micInstance.resume();
+            }, 5000);
+    });
+ 
+micInputStream.on('resumeComplete', function() {
+        console.log("Got SIGNAL resumeComplete");
+        setTimeout(function() {
+                micInstance.stop();
+            }, 5000);
+    });
+ 
+micInputStream.on('silence', function() {
+        console.log("Got SIGNAL silence");
+    });
+ 
+micInputStream.on('processExitComplete', function() {
+        console.log("Got SIGNAL processExitComplete");
+    });
+ 
+micInstance.start();
+}
+
+function newRecord(encoding, sampleRateHertz, languageCode)
+{
+
+  const request = {
+    config: {
+      encoding: encoding,
+      sampleRateHertz: sampleRateHertz,
+      languageCode: languageCode
+    },
+    interimResults: true // If you want interim results, set this to true
+  };
+
+
+  // Imports the Google Cloud client library
+  const Speech = require('@google-cloud/speech');
+
+  // Instantiates a client
+  const speech = Speech();
+
+  // Create a recognize stream
+  const recognizeStream = speech.createRecognizeStream(request)
+    .on('error', console.error)
+    .on('data', (data) => process.stdout.write(data.results + ', '));
+
+var witToken = '7FUGL22DSV4NNLTXLYTPR2AC6OFSFDBX'
+
+let fs = require('fs');
+
+// fs.createReadStream('song.wav')
+//     .pipe( sox({ output: { type: 'wav' }, effects: ['speed', 1.5] }) )
+//     .pipe( fs.createWriteStream('song.wav') );
+
+
+let Mic = require('node-microphone');
+let mic = new Mic({'debug': true });
+let micStream = mic.startRecording();
+micStream.pipe(recognizeStream);
+micStream.pipe(fs.createWriteStream('test.wav') )
+setTimeout(() => {
+    //logger.info('stopped recording');
+    console.log('stopped writing')
+    mic.stopRecording();
+}, 6000);
+mic.on('info', (info) => {
+	console.log('INFO ' + info);
+});
+mic.on('error', (error) => {
+	console.log(error);
+});
+}
+
+function newRecordBad()
+{
+var test = require('tape')
+var getMedia = require('getusermedia')
+var MediaRecorderStream = require('media-recorder-stream')
+var MediaSourceStream = require('./../src/index')
+
+
+var media = null
+test('record and get url' , function (t) {
+  t.plan(1)
+  getMedia({video: false, audio: true}, function (err, stream) {
+    if (err) throw err
+    media = stream
+    var mediaRecorder = MediaRecorderStream(media, {
+      mimeType: 'video/webm; codecs=vp8',
+      interval: 100
+    })
+
+    var mediaSourceStream = MediaSourceStream()
+    mediaRecorder.pipe(mediaSourceStream)
+
+    var video = document.createElement('video')
+    video.autoplay = true
+    video.src = window.URL.createObjectURL(mediaSourceStream.mediaSource)
+    
+    video.oncanplay = function () {
+      t.ok(video.src)
+      t.end()
+    }
+  })
+})
 }
 
 const cli = require(`yargs`)
@@ -349,6 +553,12 @@ const cli = require(`yargs`)
     `Test record and wit.ai.`,
     {},
     (opts) => testRecord()
+  )
+    .command(
+    `only`,
+    `Only record.`,
+    {},
+    (opts) => newRecord(opts.encoding, opts.sampleRateHertz, opts.languageCode)
   )
   .options({
     encoding: {
