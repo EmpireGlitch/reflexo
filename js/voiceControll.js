@@ -3,7 +3,7 @@ var sleepMode = true;
 function voice(transcriptArray){
     const wakeupPhrase = 'mirror mirror';
     const sleepPhrase = 'sleep';
-    transcript = transcriptArray.join(' ');
+    transcript = (transcriptArray.join(' ')).toLowerCase();
     if (transcript === wakeupPhrase && sleepMode){
         voiceListen();
     }
