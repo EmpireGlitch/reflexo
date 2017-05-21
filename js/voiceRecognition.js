@@ -264,69 +264,69 @@ var recognizer, recorder, callbackManager, audioContext, outputContainer;
         ];
         var wordList = [];
         var grammarCommands =
-        {numStates: 1, start: 0, end: 0, transitions: [
-                {from: 0, to: 0, word: "HELLO"},
-                {from: 0, to: 0, word: "THERE"},
-                {from: 0, to: 0, word: "OPEN"},
-                {from: 0, to: 0, word: "ARTICLE"},
-                {from: 0, to: 0, word: "NEWS"},
-                {from: 0, to: 0, word: "NUMBER"},
-                {from: 0, to: 0, word: "START"},
-                {from: 0, to: 0, word: "STOP"},
-                {from: 0, to: 0, word: "SHUT"},
-                {from: 0, to: 0, word: "UP"},
-                {from: 0, to: 0, word: "ONE"},
-                {from: 0, to: 0, word: "TWO"},
-                {from: 0, to: 0, word: "THREE"}
-        ]};
+{numStates: 1, start: 0, end: 0, transitions: [
+{from: 0, to: 0, word: "HELLO"},
+{from: 0, to: 0, word: "THERE"},
+{from: 0, to: 0, word: "OPEN"},
+{from: 0, to: 0, word: "ARTICLE"},
+{from: 0, to: 0, word: "NEWS"},
+{from: 0, to: 0, word: "NUMBER"},
+{from: 0, to: 0, word: "START"},
+{from: 0, to: 0, word: "STOP"},
+{from: 0, to: 0, word: "SHUT"},
+{from: 0, to: 0, word: "UP"},
+{from: 0, to: 0, word: "ONE"},
+{from: 0, to: 0, word: "TWO"},
+{from: 0, to: 0, word: "THREE"}
+]};
 // This grammar recognizes digits
         var grammarDigits =
-        {numStates: 1, start: 0, end: 0, transitions: [
-                {from: 0, to: 0, word: "ONE"},
-                {from: 0, to: 0, word: "TWO"},
-                {from: 0, to: 0, word: "THREE"},
-                {from: 0, to: 0, word: "FOUR"},
-                {from: 0, to: 0, word: "FIVE"},
-                {from: 0, to: 0, word: "SIX"},
-                {from: 0, to: 0, word: "SEVEN"},
-                {from: 0, to: 0, word: "EIGHT"},
-                {from: 0, to: 0, word: "NINE"},
-                {from: 0, to: 0, word: "ZERO"}
-        ]};
+{numStates: 1, start: 0, end: 0, transitions: [
+{from: 0, to: 0, word: "ONE"},
+{from: 0, to: 0, word: "TWO"},
+{from: 0, to: 0, word: "THREE"},
+{from: 0, to: 0, word: "FOUR"},
+{from: 0, to: 0, word: "FIVE"},
+{from: 0, to: 0, word: "SIX"},
+{from: 0, to: 0, word: "SEVEN"},
+{from: 0, to: 0, word: "EIGHT"},
+{from: 0, to: 0, word: "NINE"},
+{from: 0, to: 0, word: "ZERO"}
+]};
 // This grammar recognizes a few cities names
         var grammarCities =
-        {numStates: 1, start: 0, end: 0, transitions: [
-                {from: 0, to: 0, word: "NEW-YORK"},
-                {from: 0, to: 0, word: "NEW-YORK-CITY"},
-                {from: 0, to: 0, word: "PARIS"},
-                {from: 0, to: 0, word: "SHANGHAI"},
-                {from: 0, to: 0, word: "SAN-FRANCISCO"},
-                {from: 0, to: 0, word: "LONDON"},
-                {from: 0, to: 0, word: "BERLIN"}]};
+{numStates: 1, start: 0, end: 0, transitions: [
+{from: 0, to: 0, word: "NEW-YORK"},
+{from: 0, to: 0, word: "NEW-YORK-CITY"},
+{from: 0, to: 0, word: "PARIS"},
+{from: 0, to: 0, word: "SHANGHAI"},
+{from: 0, to: 0, word: "SAN-FRANCISCO"},
+{from: 0, to: 0, word: "LONDON"},
+{from: 0, to: 0, word: "BERLIN"}]};
 // This is to play with beloved or belated OSes
         var grammarOses =
-        {numStates: 7, start: 0, end: 6, transitions: [
-                {from: 0, to: 1, word: "WINDOWS"},
-                {from: 0, to: 1, word: "LINUX"},
-                {from: 0, to: 1, word: "UNIX"},
-                {from: 1, to: 2, word: "IS"},
-                {from: 2, to: 2, word: "NOT"},
-                {from: 2, to: 6, word: "GOOD"},
-                {from: 2, to: 6, word: "GREAT"},
-                {from: 1, to: 6, word: "ROCKS"},
-                {from: 1, to: 6, word: "SUCKS"},
-                {from: 0, to: 4, word: "MAC"},
-                {from: 4, to: 5, word: "O"},
-                {from: 5, to: 3, word: "S"},
-                {from: 3, to: 1, word: "X"},
-                {from: 6, to: 0, word: "AND"}]};
+{numStates: 7, start: 0, end: 6, transitions: [
+{from: 0, to: 1, word: "WINDOWS"},
+{from: 0, to: 1, word: "LINUX"},
+{from: 0, to: 1, word: "UNIX"},
+{from: 1, to: 2, word: "IS"},
+{from: 2, to: 2, word: "NOT"},
+{from: 2, to: 6, word: "GOOD"},
+{from: 2, to: 6, word: "GREAT"},
+{from: 1, to: 6, word: "ROCKS"},
+{from: 1, to: 6, word: "SUCKS"},
+{from: 0, to: 4, word: "MAC"},
+{from: 4, to: 5, word: "O"},
+{from: 5, to: 3, word: "S"},
+{from: 3, to: 1, word: "X"},
+{from: 6, to: 0, word: "AND"}]};
         var grammars =
-        [
+[
 //            {title: "OSes", g: grammarOses}, 
 //            {title: "Digits", g: grammarDigits}, 
 //            {title: "Cities", g: grammarCities},
 //            {title: "Base Commands", g: grammarCommands}
-                ];
+];
         var grammarIds = [];
         /*
          var session = {
@@ -353,92 +353,86 @@ var recognizer, recorder, callbackManager, audioContext, outputContainer;
          function recorderProcess(e) {
          var left = e.inputBuffer.getChannelData(0);
          }
-*/
-function listenGoogle(){
-console.debug('Listen-1');
-        const record = require('node-record-lpcm16');
-        
-        // Imports the Google Cloud client library
-        const Speech = require('@google-cloud/speech')({
-            projectId: 'reflexo',
-            keyFilename: 'D:\client_secret.json'
-        });
-            
-        
-        console.debug('Listen-1.5');
-        // Instantiates a client
-        const speech = Speech();
+         */
+                function listenGoogle(){
+                console.debug('Listen-1');
+                        const record = require('node-record-lpcm16');
+                        // Imports the Google Cloud client library
+                        const Speech = require('@google-cloud/speech')({
+                projectId: 'reflexo',
+                        keyFilename: 'D:\client_secret.json'
+                });
+                        console.debug('Listen-1.5');
+                        // Instantiates a client
+                        const speech = Speech();
 // The encoding of the audio file, e.g. 'LINEAR16'
-        const encoding = 'LINEAR16';
+                        const encoding = 'LINEAR16';
 // The sample rate of the audio file in hertz, e.g. 16000
-        const sampleRateHertz = 16000;
+                        const sampleRateHertz = 16000;
 // The BCP-47 language code to use, e.g. 'en-US'
-        const languageCode = 'en-US';
-        console.debug('Listen-2')
-        const request = {
-        config: {
-        encoding: encoding,
-                sampleRateHertz: sampleRateHertz,
-                languageCode: languageCode
-        },
-                interimResults: true // If you want interim results, set this to true
-        };
-        console.debug('Listen-3')
+                        const languageCode = 'en-US';
+                        console.debug('Listen-2')
+                        const request = {
+                        config: {
+                        encoding: encoding,
+                                sampleRateHertz: sampleRateHertz,
+                                languageCode: languageCode
+                        },
+                                interimResults: true // If you want interim results, set this to true
+                        };
+                        console.debug('Listen-3')
 // Create a recognize stream
-        const recognizeStream = speech.createRecognizeStream(request)
-        .on('error', function(e){
-        console.debug(e);
-        })
-        .on('data', function(e){
-        console.debug(e);
-        });
-        console.debug('to record')
+                        const recognizeStream = speech.createRecognizeStream(request)
+                        .on('error', function(e){
+                        console.debug(e);
+                        })
+                        .on('data', function(e){
+                        console.debug(e);
+                        });
+                        console.debug('to record')
 // Start recording and send the microphone input to the Speech API
-        record
-        .start({
-        sampleRateHertz: sampleRateHertz,
-                threshold: 0,
-                // Other options, see https://www.npmjs.com/package/node-record-lpcm16#options
-                verbose: true,
-                recordProgram: 'sox', // Try also "arecord" or "sox"
-                silence: '100.0'
-        })
-        .on('error', function(e){
-        console.debug(e);
-        })
-        .pipe(recognizeStream);
-        console.log('Listening, press Ctrl+C to stop.');
+                        record
+                        .start({
+                        sampleRateHertz: sampleRateHertz,
+                                threshold: 0,
+                                // Other options, see https://www.npmjs.com/package/node-record-lpcm16#options
+                                verbose: true,
+                                recordProgram: 'sox', // Try also "arecord" or "sox"
+                                silence: '100.0'
+                        })
+                        .on('error', function(e){
+                        console.debug(e);
+                        })
+                        .pipe(recognizeStream);
+                        console.log('Listening, press Ctrl+C to stop.');
+                        }
+                        
+function startSpeakable(){
+    setVoiceStatus('initializing');
+    var Speakable = require('speakable');
+    var API_KEY = process.env.GOOGLE_API_KEY;
+    // Setup google speech
+    var speakable = new Speakable({key: API_KEY}, {lang:'en-US', threshold:0.9, sox_path:'C:/Program Files (x86)/sox-14-4-1/sox'});
+    speakable.on('speechStart', function() {
+        console.log('onSpeechStart');
+    });
+    speakable.on('speechStop', function() {
+        console.log('onSpeechStop');
+        speakable.recordVoice();
+    });
+    speakable.on('speechReady', function() {
+        console.log('onSpeechReady');
+        setVoiceStatus('ready');
+    });
+    speakable.on('error', function(err) {
+        console.log('onError:');
+        console.log(err);
+        setVoiceStatus('error');
+//        speakable.recordVoice();
+    });
+    speakable.on('speechResult', function(spokenWords) {
+        console.log('onSpeechResult:')
+        console.log(spokenWords);
+    });
+    speakable.recordVoice();
 }
-
-var Speakable = require('speakable');
-var API_KEY = process.env.GOOGLE_API_KEY;
-console.log(API_KEY)
-
-// Setup google speech
-var speakable = new Speakable({key: API_KEY},{lang:'en-US'});
-
-speakable.on('speechStart', function() {
-  console.log('onSpeechStart');
-});
-
-speakable.on('speechStop', function() {
-  console.log('onSpeechStop');
-//  speakable.recordVoice();
-});
-
-speakable.on('speechReady', function() {
-  console.log('onSpeechReady');
-});
-
-speakable.on('error', function(err) {
-  console.log('onError:');
-  console.log(err);
-//  speakable.recordVoice();
-});
-
-speakable.on('speechResult', function(spokenWords) {
-  console.log('onSpeechResult:')
-  console.log(spokenWords);
-});
-
-//speakable.recordVoice();
