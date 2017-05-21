@@ -415,6 +415,7 @@ function startSpeakable(){
     var speakable = new Speakable({key: API_KEY}, {lang:'en-US', threshold:0.9, sox_path:'C:/Program Files (x86)/sox-14-4-1/sox'});
     speakable.on('speechStart', function() {
         console.log('onSpeechStart');
+        setVoiceStatus('ready');
     });
     speakable.on('speechStop', function() {
         console.log('onSpeechStop');
@@ -422,7 +423,7 @@ function startSpeakable(){
     });
     speakable.on('speechReady', function() {
         console.log('onSpeechReady');
-        setVoiceStatus('ready');
+        
     });
     speakable.on('error', function(err) {
         console.log('onError:');
@@ -433,6 +434,7 @@ function startSpeakable(){
     speakable.on('speechResult', function(spokenWords) {
         console.log('onSpeechResult:')
         console.log(spokenWords);
+        voice(spokenWords);
     });
     speakable.recordVoice();
 }
