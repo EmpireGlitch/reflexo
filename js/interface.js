@@ -97,7 +97,7 @@ $(document).ready(function () {
 
 
     // Load voice recignition
-//    initializeVoice();
+    initializeVoice('speakable');
 
     // Load gesture controll
     initLeap();
@@ -120,6 +120,7 @@ function initializeVoice(system) {
     if (system === undefined) {
         system = 'sphinx';
     }
+    // To Do change to switch case
     if (system === 'sphinx') {
         var startTime = new Date();
         console.debug('Starting Sphinx');
@@ -133,6 +134,11 @@ function initializeVoice(system) {
         // initialize sphinx
         startSphinx();
     }
+    else if (system === 'speakable'){
+        console.debug('Starting speakable');
+        startSpeakable();
+    }
+    
 }
 
 function getRSS(rssUrl) {
