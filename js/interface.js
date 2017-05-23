@@ -14,7 +14,7 @@ $(document).ready(function () {
             jQuery.browser.version = RegExp.$1;
         }
     })();
-
+    
     // Debug buttons
     var mainDebug = new debugFrame('Debug')
 
@@ -51,7 +51,8 @@ $(document).ready(function () {
     var sphinxDebug = new debugFrame('Sphinx');
 
     sphinxDebug.addButton('Start', function () {
-        startRecording('Base Commands');
+//        startRecording('EnglishCMU');
+        startRecording('Base Offline Commands');
     });
     sphinxDebug.addButton('Stop', function () {
         stopRecording();
@@ -118,25 +119,24 @@ controller.connect();
 
 function initializeVoice(system) {
     if (system === undefined) {
-        system = 'sphinx';
+        system = 'speakable';
     }
-    // To Do change to switch case
-    if (system === 'sphinx') {
-        var startTime = new Date();
-        console.debug('Starting Sphinx');
-        // Start listening as sphinx is ready
-        $(document).on("sphinxReady", function () {
-            console.debug('Event Sphinx ready');
-//            startRecording('Base Commands Keywords');
-            var endTime = new Date();
-            console.debug('Sphinx Startup time: ', endTime - startTime + 'ms');
-        });
-        // initialize sphinx
-        startSphinx();
-    }
-    else if (system === 'speakable'){
-        console.debug('Starting speakable');
-        startSpeakable();
+    // Start sphinx for offline wakeup
+    var startTime = new Date();
+    console.debug('Starting Sphinx');
+    // Start listening as sphinx is ready
+    $(document).on("sphinxReady", function () {
+        console.debug('Event Sphinx ready');
+//            startRecording('EnglishCMU');
+        var endTime = new Date();
+        console.debug('Sphinx Startup time: ', endTime - startTime + 'ms');
+    });
+    // initialize sphinx
+//    startSphinx();
+    
+    if (system === 'speakable'){
+//        console.debug('Starting speakable');
+//        startSpeakable();
     }
     
 }
@@ -342,6 +342,8 @@ function setGestureCursor(hand, finger, point) {
                     // Debug code
                     leapDebug.setValue('nPoint', normalized.x + ';' + normalized.y);
                     leapDebug.setValue('aPoint', x + ';' + y);
+//                    leapDebug.setValue('cursor',document.elementsFromPoint(x,y));
+//                    console.debug(document.elementsFromPoint(x,y))
                     break;
                 case 3:
                     $('#right-finger-3').offset({left: x, top: y});
