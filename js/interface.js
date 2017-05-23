@@ -27,24 +27,24 @@ $(document).ready(function () {
     mainDebug.addButton('Sphinx', function () {
         showOverlay();
         $('#overlay *').hide();
-        $('#sphinx-wrap').append('<iframe class="web-page" src="sphinx-test/live.html"></iframe>');
-        $('#sphinx-wrap').show();
+        $('#iframe-wrap').append('<iframe class="web-page" src="sphinx-test/live.html"></iframe>');
+        $('#iframe-wrap').show();
     });
 
     // Anayng test page
     mainDebug.addButton('Anyang', function () {
         showOverlay();
         $('#overlay *').hide();
-        $('#sphinx-wrap').append('<iframe class="web-page" src="anyangTest/TestAnnayang.html"></iframe>');
-        $('#sphinx-wrap').show();
+        $('#iframe-wrap').append('<iframe class="web-page" src="anyangTest/TestAnnayang.html"></iframe>');
+        $('#iframe-wrap').show();
     });
 
     // Recorder test page
     mainDebug.addButton('Recorder', function () {
         showOverlay();
         $('#overlay *').hide();
-        $('#sphinx-wrap').append('<iframe class="web-page" src="recorder/index.html"></iframe>');
-        $('#sphinx-wrap').show();
+        $('#iframe-wrap').append('<iframe class="web-page" src="recorder/index.html"></iframe>');
+        $('#iframe-wrap').show();
     });
 
     // Sphinx debug frame
@@ -243,6 +243,7 @@ function showOverlay() {
 }
 
 function hideOverlay() {
+    $('#overlay *').hide();
     $('#overlay').hide();
     $('#mirrortop').removeClass('blur');
     $('#mirrortop').addClass('unblur');
