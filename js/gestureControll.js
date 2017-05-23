@@ -117,9 +117,6 @@ function initLeap() {
 
             for (var j = 0; j < hands[i].fingers.length; j++) {
                 finger = hand + (j + 1);
-//                if (isActiveZone(hands[i].fingers[j].stabilizedTipPosition)){
-//                    console.debug(finger,'active');
-//                }
                 if (isActiveMode(hands[i].fingers[j]) && !fingersExtended[finger]) {
                     fingersExtended[finger] = true;
                     var point = {x: hands[i].fingers[j].stabilizedTipPosition[0], y: hands[i].fingers[j].stabilizedTipPosition[1]}
@@ -162,18 +159,30 @@ function initLeap() {
         doOutput = false;
     }); //Controller frame ends
 
+
+
+
+
     controller.on('gesture', function (gesture) {
         gestureDebug.setValue('Gesture', gesture.type);
         // Detect downSwipe
         if (gesture.type === 'swipe' && gesture.state === 'stop') {
-            // get sistance and angle
-            var normalDistance = (gesture.startPosition[1] - gesture.position[0]) / calibration.vRange;
+            var direction
+            if (gesture.direction[1] < 0){
+                direction = 1
+            }
+            else {
+                direction = -1
+            }
+            // get distance and angle
+            var normalDistance = direction * (gesture.startPosition[1] - gesture.position[0]) / calibration.vRange;
             gestureDebug.setValue('swipe length', gesture.startPosition[1] - gesture.position[0]);
             gestureDebug.setValue('swipe normal', normalDistance);
-
-
+            if (normalDistance > 0.5 && !twoFingers()){
+                hideOverlay();
+            }
+//            console.debug(gesture);
         }
-//        console.debug(gesture);
     });
 
     $(controller).on('leapTap', function (e, finger, point) {
@@ -275,7 +284,7 @@ function isPinched(frame) {
 
 function twoFingers() {
     // Are index and middle fingers extended
-    return fingersExtended.r2 && fingersExtended.r3;
+    return !fingersExtended.r1 && fingersExtended.r2 && fingersExtended.r3 && !fingersExtended.r4 && !fingersExtended.r5;
 }
 
 function isActiveMode(finger) {
