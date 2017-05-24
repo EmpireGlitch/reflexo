@@ -2,7 +2,7 @@ var leapjs = require('leapjs');
 var controller = new leapjs.Controller({enableGestures: true});
 
 var calibration = {};
-var configuration = {activeDistance: 50, pinchDistance: 20, tapTime: 2000, downSwipeSize: 0.5};
+var configuration = {activeDistance: 50, pinchDistance: 25, tapTime: 2000, downSwipeSize: 0.5};
 var fingersExtended = {
     l1: false,
     l2: false,
@@ -28,22 +28,37 @@ var fingersActive = {
     r5: false
 };
 
+// Debug leapframe
 var TestFrame;
+// Debug frames on page
 var leapDebug;
 var gestureDebug;
 var fingersDebug;
 
+var currentTwoFingers;
+
+// for leap tapping elements
 var focusElement;
-var tapTimer;
 var tapTimeout;
 
-var leapTapTimer = 0;
+// for 2 finger scrolling
+var scrollStart;
+var articleScrollStart;
+
+// For pinching object
+var pinchedFrame;
+var currentPinched;
+var pinchPointStart;
+var pinchFrameStart;
+
 
 function initLeap() {
 
     leapDebug = new debugFrame('Leap');
     gestureDebug = new debugFrame('Gestures');
     fingersDebug = new debugFrame('Fingers');
+
+    currentTwoFingers = false;
 
     var doOutput = true;
     //    calibrateScreen({x:-200,y:400},{x:163,y:364},{x:-178,y:100},{x:179,y:100}, -47);
@@ -107,7 +122,7 @@ function initLeap() {
             }
         }
 
-        // Active zone events
+        // Active zone events, extended fingers
         for (var i = 0; i < hands.length; i++) {
             if (hands[i].type === 'left') {
                 var hand = 'l';
@@ -117,12 +132,15 @@ function initLeap() {
 
             for (var j = 0; j < hands[i].fingers.length; j++) {
                 finger = hand + (j + 1);
-                if (isActiveMode(hands[i].fingers[j]) && !fingersExtended[finger]) {
-                    fingersExtended[finger] = true;
-                    var point = {x: hands[i].fingers[j].stabilizedTipPosition[0], y: hands[i].fingers[j].stabilizedTipPosition[1]}
+                //extendd fingers
+                fingersExtended[finger] = frame.hands[i].fingers[j].extended;
+
+                if (isActiveMode(hands[i].fingers[j]) && fingersExtended[finger] && !fingersActive[finger]) {
+//                    fingersExtended[finger] = true;
+                    var point = {x: hands[i].fingers[j].stabilizedTipPosition[0], y: hands[i].fingers[j].stabilizedTipPosition[1]};
                     $(controller).trigger('inActive', [finger, point]);
-                } else if (!isActiveMode(hands[i].fingers[j]) && fingersExtended[finger]) {
-                    fingersExtended[finger] = false;
+                } else if ((!isActiveMode(hands[i].fingers[j]) || !fingersExtended[finger]) && fingersActive[finger]) {
+//                    fingersExtended[finger] = false;
                     $(controller).trigger('outActive', [finger]);
                 }
 
@@ -131,33 +149,84 @@ function initLeap() {
 
         // If finger above element for set time, tap it
         if (fingersActive.r2) {
-            var hands = frame.hands;
-            var point = {x: hands[0].fingers[1].stabilizedTipPosition[0], y: hands[0].fingers[1].stabilizedTipPosition[1]};
-            var aPoint = screen(point);
-            var currentHoverElement = getElementFromPoint(aPoint);
-            
-            if (currentHoverElement !== focusElement) {
-                if (tapTimeout !== undefined) {
+            if (frame.hands[0] !== undefined) {
+                var hands = frame.hands;
+                var point = {x: hands[0].fingers[1].stabilizedTipPosition[0], y: hands[0].fingers[1].stabilizedTipPosition[1]};
+                var aPoint = screen(point);
+                var currentHoverElement = getElementFromPoint(aPoint);
+
+                if (currentHoverElement !== focusElement) {
+                    if (tapTimeout !== undefined) {
 //                    console.debug('timer destroyed::', focusElement, '!=', currentHoverElement);
-                    clearTimeout(tapTimeout);
-                    tapTimeout = undefined;
-//                    focusElement = currentHoverElement;
-                } else if (tapTimeout === undefined) {
-                    focusElement = currentHoverElement;
-//                    console.debug('timer started');
-                    tapTimeout = setTimeout(function () {
-                        $(controller).trigger('leapTap', [finger, point]);
-                    },configuration.tapTime);
+                        clearTimeout(tapTimeout);
+                        tapTimeout = undefined;
+                    } else if (tapTimeout === undefined) {
+                        focusElement = currentHoverElement;
+//                    console.debug('timer started',focusElement);
+                        tapTimeout = setTimeout(function () {
+                            $(controller).trigger('leapTap', [finger, point]);
+                        }, configuration.tapTime);
+                    }
                 }
             }
         } else if (!fingersActive.r2 && tapTimeout !== undefined) {
             clearTimeout(tapTimeout);
             tapTimeout = undefined;
+            focusElement = undefined;
 //            console.debug('timer destroyed');
+        } else {
+            focusElement = undefined;
+        }
+
+        //Trigger startTwoFingers
+        if (twoFingers() !== currentTwoFingers) {
+            if (twoFingers()) {
+                $(controller).trigger('startTwoFingers', [frame]);
+            } else {
+                currentTwoFingers = false;
+            }
+        }
+
+        //Scroll article
+        if (twoFingers() && $('#news-wrap').children().length !== 0) {
+            if (frame.hands[0] !== undefined) {
+                var point = {x: frame.hands[0].fingers[1].stabilizedTipPosition[0], y: frame.hands[0].fingers[1].stabilizedTipPosition[1]};
+                var aPoint = screen(point);
+                var currentPos = aPoint.y;
+                var scrollDistance = currentPos - scrollStart;
+//            console.debug(articleScrollStart,currentPos,scrollStart,scrollDistance);
+                $('#news-wrap').scrollTop(articleScrollStart - scrollDistance);
+            }
+        }
+
+        //Trigger startPinch
+        if (isPinched(frame) !== currentPinched) {
+            if (isPinched(frame)) {
+                $(controller).trigger('startPinch', [frame]);
+            } else {
+                currentPinched = false;
+            }
+        }
+
+        //Pich frames
+        if (isPinched(frame) && pinchedFrame !== undefined) {
+            if (pinchedFrame[0] !== undefined && frame.hands[0] !== undefined) {
+                var point = {
+                    x: (frame.hands[0].fingers[1].stabilizedTipPosition[0] + frame.hands[0].fingers[0].stabilizedTipPosition[0]) / 2,
+                    y: (frame.hands[0].fingers[1].stabilizedTipPosition[1] + frame.hands[0].fingers[0].stabilizedTipPosition[1]) / 2
+                };
+                var aPoint = screen(point);
+                var currentPos = {
+                    top: pinchFrameStart.top + aPoint.y - pinchPointStart.y,
+                    left: pinchFrameStart.left + aPoint.x - pinchPointStart.x
+                };
+//                console.debug(currentPos);
+                pinchedFrame.offset(currentPos);
+            }
         }
 
         doOutput = false;
-    }); //Controller frame ends
+    }); // Controller frame ends
 
 
 
@@ -167,19 +236,19 @@ function initLeap() {
         gestureDebug.setValue('Gesture', gesture.type);
         // Detect downSwipe
         if (gesture.type === 'swipe' && gesture.state === 'stop') {
-            var direction
-            if (gesture.direction[1] < 0){
-                direction = 1
-            }
-            else {
-                direction = -1
+            var direction;
+            if (gesture.direction[1] < 0) {
+                direction = 1;
+            } else {
+                direction = -1;
             }
             // get distance and angle
             var normalDistance = direction * (gesture.startPosition[1] - gesture.position[0]) / calibration.vRange;
             gestureDebug.setValue('swipe length', gesture.startPosition[1] - gesture.position[0]);
             gestureDebug.setValue('swipe normal', normalDistance);
-            if (normalDistance > 0.5 && !twoFingers()){
-                hideOverlay();
+            if (normalDistance > 0.5 && fingersExtended.r1 && fingersExtended.r2 && fingersExtended.r3 && fingersExtended.r4 && fingersExtended.r5) {
+                $(controller).trigger('downSwipe', []);
+                console.debug('downSwipe');
             }
 //            console.debug(gesture);
         }
@@ -199,9 +268,9 @@ function initLeap() {
                 $('#right-finger-1').addClass('active-cursor');
                 break;
             case 'r2':
-                focusElement = getElementFromPoint(point);;
                 var aPoint = screen(point);
-//                leapClick(aPoint);
+                focusElement = getElementFromPoint(aPoint);
+                ;
                 $('#right-finger-2').addClass('active-cursor');
                 break;
             case 'r3':
@@ -260,7 +329,40 @@ function initLeap() {
     });
 
     $(controller).on('downSwipe', function () {
-        // Close all popups        
+        hideOverlay();
+    });
+
+    $(controller).on('startTwoFingers', function (e, frame) {
+        currentTwoFingers = true;
+        console.debug('Two fingers');
+        var point = {x: frame.hands[0].fingers[1].stabilizedTipPosition[0], y: frame.hands[0].fingers[1].stabilizedTipPosition[1]};
+        var aPoint = screen(point);
+        scrollStart = point.y;
+        articleScrollStart = $('#news-wrap').scrollTop();
+    });
+
+    $(controller).on('stopTwoFingers', function () {
+
+    });
+
+    $(controller).on('startPinch', function (e, frame) {
+        currentPinched = true;
+
+        // get middle point between thumb and index
+        var point = {
+            x: (frame.hands[0].fingers[1].stabilizedTipPosition[0] + frame.hands[0].fingers[0].stabilizedTipPosition[0]) / 2,
+            y: (frame.hands[0].fingers[1].stabilizedTipPosition[1] + frame.hands[0].fingers[0].stabilizedTipPosition[1]) / 2
+        };
+        var aPoint = screen(point);
+        pinchedFrame = $(getElementFromPoint(aPoint,'draggable'));
+//        console.debug('Pinch', pinchedFrame);
+        pinchPointStart = aPoint;
+        pinchFrameStart = pinchedFrame.offset();
+
+    });
+
+    $(controller).on('stopPinch', function () {
+        console.debug('Stop Pinch');
     });
 }
 
@@ -284,7 +386,8 @@ function isPinched(frame) {
 
 function twoFingers() {
     // Are index and middle fingers extended
-    return !fingersExtended.r1 && fingersExtended.r2 && fingersExtended.r3 && !fingersExtended.r4 && !fingersExtended.r5;
+//    return !fingersExtended.r1 && fingersExtended.r2 && fingersExtended.r3 && !fingersExtended.r4 && !fingersExtended.r5;
+    return fingersExtended.r2 && fingersExtended.r3;
 }
 
 function isActiveMode(finger) {
@@ -405,11 +508,17 @@ function isTapable(element) {
 }
 
 // get topmost element at coordinates that is not leap cursor
-function getElementFromPoint(point) {
+function getElementFromPoint(point, gotClass) {
     var elements = document.elementsFromPoint(point.x, point.y);
-    for (var i = 0; i < elements.length; i++){
-        if (!$(elements[i]).parent().hasClass('cursor-hand')){
-            return elements[i];
+    for (var i = 0; i < elements.length; i++) {
+        if (!$(elements[i]).parent().hasClass('cursor-hand')) {
+            if (gotClass !== undefined) {
+                if ($(elements[i]).hasClass(gotClass)){
+                    return elements[i];
+                }
+            } else {
+                return elements[i];
+            }
         }
     }
 }
