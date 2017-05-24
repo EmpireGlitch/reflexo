@@ -32,13 +32,23 @@ $(document).ready(function () {
     });
 
     // Anayng test page
+    /*
     mainDebug.addButton('Anyang', function () {
         showOverlay();
         $('#overlay *').hide();
         $('#iframe-wrap').append('<iframe class="web-page" src="anyangTest/TestAnnayang.html"></iframe>');
         $('#iframe-wrap').show();
     });
-
+    */
+   // Lorem ipsum article
+   mainDebug.addButton('Lorem Ipsum',function(){
+       showOverlay();
+       $('#overlay *').hide();
+       $.get('http://loripsum.net/api/10/long/headers',function(response){
+        $('#news-wrap').append(response);
+        $('#news-wrap').show();
+    });
+   });
     // Recorder test page
     mainDebug.addButton('Recorder', function () {
         showOverlay();
