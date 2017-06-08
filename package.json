@@ -1,10 +1,11 @@
 {
   "name": "reflexo-smart-mirror",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "Smart mirror focused on contacless interface",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "node C:\\Program Files\\NetBeans 8.1\\npm start",
+    "rebuild": "electron-rebuild -f -w grpc"
   },
   "repository": "https://github.com/EmpireGlitch/reflexo",
   "keywords": [
@@ -25,19 +26,21 @@
   "license": "MIT",
   "devDependencies": {
     "@google-cloud/nodejs-repo-tools": "1.4.7",
-    "electron": "~1.6.2",
+    "electron": "^1.6.2",
     "electron-rebuild": "^1.5.11",
     "electron-reload": "^1.1.0"
   },
   "dependencies": {
     "@google-cloud/speech": "0.9.0",
     "@google-cloud/storage": "1.0.0",
-    "node-record-lpcm16": "0.3.0",
     "annyang": "^2.6.0",
     "app-root-path": "^2.0.1",
     "electron-google-oauth": "^2.0.0",
+    "google-speech-microphone": "^1.0.1",
     "jquery": "^3.2.1",
     "leapjs": "^0.6.4",
+    "node-record-lpcm16": "0.3.0",
+    "pocketsphinx-web": "0.0.0",
     "yargs": "7.0.2"
   },
   "cloud-repo-tools": {
