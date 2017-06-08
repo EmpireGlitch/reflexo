@@ -419,3 +419,12 @@ function clickRipple(point) {
         $(this).off(e);
     });
 }
+
+function hideInterface(){
+    hideOverlay();
+    $('#mirrortop').hide();
+}
+
+function showInterface(){
+    $('#mirrortop').show();
+}
