@@ -60,6 +60,24 @@ function initLeap() {
 
     currentTwoFingers = false;
 
+    // Add hand/finger cursors to html
+    var cursorsHtml = '<div class="cursor-hand" id="right-hand">'+
+            '<div class="cursor-finger" id="right-finger-1"></div>'+
+            '<div class="cursor-finger" id="right-finger-2"></div>'+
+            '<div class="cursor-finger" id="right-finger-3"></div>'+
+            '<div class="cursor-finger" id="right-finger-4"></div>'+
+            '<div class="cursor-finger" id="right-finger-5"></div>'+
+        '</div>'+
+        '<div class="cursor-hand" id="left-hand">'+
+            '<div class="cursor-finger" id="left-finger-1"></div>'+
+            '<div class="cursor-finger" id="left-finger-2"></div>'+
+            '<div class="cursor-finger" id="left-finger-3"></div>'+
+            '<div class="cursor-finger" id="left-finger-4"></div>'+
+            '<div class="cursor-finger" id="left-finger-5"></div>'+
+        '</div>';
+    $('body').append($(cursorsHtml));
+
+
     var doOutput = true;
     //    calibrateScreen({x:-200,y:400},{x:163,y:364},{x:-178,y:100},{x:179,y:100}, -47);
     calibrateScreen({x: -170, y: 355}, {x: 185, y: 390}, {x: 200, y: 100}, {x: -180, y: 102}, -47);
