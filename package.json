@@ -4,7 +4,7 @@
   "description": "Smart mirror focused on contacless interface",
   "main": "main.js",
   "scripts": {
-    "start": "node C:\\Program Files\\NetBeans 8.1\\npm start",
+    "start": "electron .",
     "rebuild": "electron-rebuild -f -w grpc"
   },
   "repository": "https://github.com/EmpireGlitch/reflexo",
