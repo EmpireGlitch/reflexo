@@ -205,6 +205,7 @@ function initLeap() {
                 $(controller).trigger('startPinch', [frame]);
             } else {
                 currentPinched = false;
+                $(controller).trigger('endPinch',[]);
             }
         }
 
